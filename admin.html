@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROUIS | Administration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #030303; color: #f5f5f7; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-display { font-family: 'Syne', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Écran de connexion -->
+    <div id="login-screen" class="glass-card p-10 rounded-3xl shadow-2xl max-w-sm w-full text-center transition-all duration-500">
+        <h1 class="font-display text-3xl font-bold mb-2">ROUIS<span class="text-blue-500">.</span></h1>
+        <p class="text-gray-400 text-sm mb-8">Accès sécurisé Administrateur</p>
+        
+        <input type="password" id="admin-pass" placeholder="Code secret" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 mb-4 text-center tracking-[0.3em] font-mono">
+        <button onclick="checkAuth()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-colors">Déverrouiller</button>
+        <p id="error-msg" class="text-red-400 text-sm mt-4 hidden">Code incorrect.</p>
+    </div>
+
+    <!-- Tableau de bord Admin -->
+    <div id="admin-panel" class="hidden glass-card p-10 rounded-3xl shadow-2xl max-w-2xl w-full transition-all duration-500">
+        <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+            <h1 class="font-display text-2xl font-bold">Nouvelle Commande</h1>
+            <span class="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-bold">En ligne</span>
+        </div>
+
+        <form id="order-form" class="space-y-5">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs text-gray-400 uppercase tracking-wider mb-2">ID Commande (ex: CMD-123)</label>
+                    <input type="text" id="order-id" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 uppercase tracking-wider mb-2">Nom du Client</label>
+                    <input type="text" id="client-name" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs text-gray-400 uppercase tracking-wider mb-2">Prestation choisie</label>
+                <input type="text" id="service-name" placeholder="Ex: Pro Business + Stripe" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500">
+            </div>
+
+            <div>
+                <label class="block text-xs text-gray-400 uppercase tracking-wider mb-2">Étape d'avancement</label>
+                <select id="step" class="w-full bg-[#121212] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500">
+                    <option value="1">1. Stratégie & Brief validé</option>
+                    <option value="2">2. Maquette & Design en cours</option>
+                    <option value="3">3. Développement & Code</option>
+                    <option value="4">4. Terminé & Prêt au lancement</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs text-gray-400 uppercase tracking-wider mb-2">Lien de démo (Optionnel)</label>
+                <input type="url" id="preview-url" placeholder="https://..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500">
+            </div>
+
+            <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-bold py-4 rounded-xl mt-4 transition-all">
+                Générer & Sauvegarder
+            </button>
+        </form>
+
+        <!-- Affichage du lien à envoyer au client -->
+        <div id="link-output" class="hidden mt-6 p-4 border border-green-500/30 bg-green-500/10 rounded-xl text-center">
+            <p class="text-sm text-green-400 mb-2">Lien généré avec succès ! Envoyez ceci au client :</p>
+            <a id="client-link" href="#" target="_blank" class="text-white font-mono text-sm underline hover:text-blue-400"></a>
+        </div>
+    </div>
+
+    <!-- Script de logique et Firebase -->
+    <script type="module">
+        // Remplacer par la configuration de ton projet Firebase (Console Firebase > Paramètres)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "TA_CLE_API_FIREBASE",
+            authDomain: "ton-projet.firebaseapp.com",
+            projectId: "ton-projet",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Système de connexion
+        window.checkAuth = () => {
+            const pass = document.getElementById("admin-pass").value;
+            if (pass === "270511") {
+                document.getElementById("login-screen").classList.add("hidden");
+                document.getElementById("admin-panel").classList.remove("hidden");
+            } else {
+                document.getElementById("error-msg").classList.remove("hidden");
+            }
+        };
+
+        // Soumission du formulaire
+        document.getElementById("order-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const id = document.getElementById("order-id").value.trim();
+            
+            const data = {
+                clientName: document.getElementById("client-name").value,
+                service: document.getElementById("service-name").value,
+                step: parseInt(document.getElementById("step").value),
+                previewUrl: document.getElementById("preview-url").value,
+                updatedAt: new Date().toISOString()
+            };
+
+            try {
+                // Enregistre dans Firebase
+                await setDoc(doc(db, "orders", id), data);
+                
+                // Affiche le lien
+                const url = `${window.location.origin}/suivis?id=${id}`;
+                const linkEl = document.getElementById("client-link");
+                linkEl.href = url;
+                linkEl.innerText = url;
+                document.getElementById("link-output").classList.remove("hidden");
+                
+                // Remet à zéro le form (sauf l'étape)
+                document.getElementById("order-id").value = "";
+                document.getElementById("client-name").value = "";
+                
+            } catch (error) {
+                console.error("Erreur Firebase:", error);
+                alert("Erreur: N'oublie pas de mettre tes vraies clés Firebase dans le code !");
+            }
+        });
+    </script>
+</body>
+</html>
