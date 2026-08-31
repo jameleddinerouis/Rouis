@@ -8,74 +8,65 @@
     <style>
         body { background-color: #050505; color: #fafafa; font-family: 'Inter', sans-serif; }
         .glass { background: rgba(25, 25, 25, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .chat-scroll::-webkit-scrollbar { width: 4px; }
-        .chat-scroll::-webkit-scrollbar-thumb { background: #333; rounded: 10px; }
     </style>
 </head>
-<body class="h-screen flex overflow-hidden">
+<body class="min-h-screen flex items-center justify-center p-4">
 
     <!-- Login -->
-    <div id="login-screen" class="absolute inset-0 z-50 flex items-center justify-center bg-[#050505]">
-        <div class="glass p-10 rounded-2xl w-full max-w-sm text-center">
-            <h1 class="font-['Syne'] text-2xl font-bold mb-6 tracking-wide">ADMIN.</h1>
-            <input type="password" id="admin-pass" placeholder="Code secret" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white mb-4 text-center font-mono focus:outline-none">
-            <button onclick="checkAuth()" class="w-full bg-white text-black font-bold py-3 rounded-lg">Accéder</button>
-        </div>
+    <div id="login-screen" class="glass p-10 rounded-2xl w-full max-w-sm text-center">
+        <h1 class="font-['Syne'] text-2xl font-bold mb-6 tracking-wide">ADMIN.</h1>
+        <input type="password" id="admin-pass" placeholder="Code secret" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white mb-4 text-center font-mono focus:outline-none">
+        <button onclick="checkAuth()" class="w-full bg-white text-black font-bold py-3 rounded-lg">Accéder</button>
     </div>
 
     <!-- Dashboard Principal -->
-    <div id="admin-panel" class="hidden w-full flex h-full">
+    <div id="admin-panel" class="hidden glass p-10 rounded-2xl w-full max-w-lg">
+        <h2 class="text-xs uppercase tracking-widest text-gray-500 font-bold mb-6 text-center">Gestion de Projet</h2>
         
-        <!-- Panneau Gauche : Statut -->
-        <div class="w-1/3 border-r border-white/5 p-8 flex flex-col overflow-y-auto">
-            <h2 class="text-xs uppercase tracking-widest text-gray-500 font-bold mb-6">Gestion du Projet</h2>
-            
-            <form id="load-form" class="flex gap-2 mb-8">
-                <input type="text" id="order-id" placeholder="ID (ex: CMD-123)" required class="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-white/30">
-                <button type="submit" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-sm transition-colors">Charger</button>
-            </form>
+        <form id="load-form" class="flex gap-2 mb-8 border-b border-white/5 pb-8">
+            <input type="text" id="order-id" placeholder="ID (ex: CMD-123)" required class="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white">
+            <button type="submit" class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-lg text-sm transition-colors font-medium">Charger</button>
+        </form>
 
-            <form id="update-form" class="space-y-4 opacity-50 pointer-events-none transition-opacity">
-                <input type="text" id="client-name" placeholder="Nom du Client" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none">
-                <input type="text" id="service-name" placeholder="Service (ex: L'Essentiel)" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none">
-                <select id="step" class="w-full bg-[#111] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none">
+        <form id="update-form" class="space-y-4 opacity-50 pointer-events-none transition-opacity">
+            <div>
+                <label class="block text-[10px] uppercase text-gray-500 mb-1 pl-1">Nom du Client</label>
+                <input type="text" id="client-name" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none text-white">
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase text-gray-500 mb-1 pl-1">Prestation (Ex: L'Essentiel)</label>
+                <input type="text" id="service-name" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none text-white">
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase text-gray-500 mb-1 pl-1">Étape actuelle</label>
+                <select id="step" class="w-full bg-[#111] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none text-white">
                     <option value="1">1. Stratégie & Brief</option>
                     <option value="2">2. Design UI/UX</option>
-                    <option value="3">3. Développement</option>
-                    <option value="4">4. Livraison</option>
+                    <option value="3">3. Développement Web</option>
+                    <option value="4">4. Phase de Livraison</option>
                 </select>
-                <input type="url" id="preview-url" placeholder="Lien Démo (Optionnel)" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none">
-                <button type="submit" class="w-full bg-white text-black font-medium py-3 rounded-lg text-sm">Sauvegarder les infos</button>
-            </form>
-
-            <div id="link-box" class="mt-8 hidden p-4 glass rounded-lg text-center">
-                <p class="text-xs text-gray-400 mb-2">Lien client généré :</p>
-                <button onclick="copyLink()" id="copy-btn" class="w-full bg-white/5 hover:bg-white/10 py-2 rounded text-xs font-mono border border-white/10 transition-colors">
-                    Copier le lien
-                </button>
             </div>
-        </div>
-
-        <!-- Panneau Droit : Chat -->
-        <div class="w-2/3 flex flex-col bg-[#0a0a0a] relative">
-            <div class="p-6 border-b border-white/5 bg-[#050505]">
-                <h2 class="text-sm font-medium">Communication Client <span id="chat-client-name" class="text-gray-500"></span></h2>
+            <div>
+                <label class="block text-[10px] uppercase text-gray-500 mb-1 pl-1">Lien de la Démo (Optionnel)</label>
+                <input type="url" id="preview-url" placeholder="https://" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none text-white">
             </div>
             
-            <div id="chat-box" class="flex-1 p-6 overflow-y-auto chat-scroll flex flex-col gap-4">
-                <div class="text-center text-xs text-gray-600 mt-10">Chargez un projet pour afficher l'historique (7 derniers jours)</div>
-            </div>
+            <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded-lg mt-4 hover:bg-gray-200 transition-colors">
+                Enregistrer la commande
+            </button>
+        </form>
 
-            <form id="chat-form" class="p-6 border-t border-white/5 bg-[#050505] flex gap-4 hidden">
-                <input type="text" id="chat-input" placeholder="Écrire un message..." autocomplete="off" class="flex-1 bg-white/5 border border-white/10 rounded-full px-6 py-3 text-sm focus:outline-none focus:border-white/30">
-                <button type="submit" class="bg-white text-black rounded-full px-6 font-medium text-sm">Envoyer</button>
-            </form>
+        <div id="link-box" class="mt-6 hidden p-4 bg-white/5 border border-white/10 rounded-lg text-center">
+            <p class="text-xs text-gray-400 mb-2">Lien à envoyer au client :</p>
+            <button onclick="copyLink()" id="copy-btn" class="w-full bg-white/10 hover:bg-white/20 py-2 rounded text-sm font-mono border border-white/5 transition-colors">
+                Copier le lien
+            </button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA2TfFM8S6sKtbM_t39YQlEe-um_VlkRI4",
@@ -90,13 +81,6 @@
         const db = getFirestore(app);
         
         let currentOrderId = null;
-        let chatUnsubscribe = null;
-        let initialLoad = true;
-
-        // Permissions Notifications
-        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
-            Notification.requestPermission();
-        }
 
         window.checkAuth = () => {
             if (document.getElementById("admin-pass").value === "270511") {
@@ -105,7 +89,6 @@
             }
         };
 
-        // Charger ou Créer une commande
         document.getElementById("load-form").addEventListener("submit", async (e) => {
             e.preventDefault();
             const id = document.getElementById("order-id").value.trim();
@@ -116,7 +99,6 @@
 
             const form = document.getElementById("update-form");
             form.classList.remove("opacity-50", "pointer-events-none");
-            document.getElementById("chat-form").classList.remove("hidden");
             document.getElementById("link-box").classList.remove("hidden");
             
             if (docSnap.exists()) {
@@ -125,16 +107,11 @@
                 document.getElementById("service-name").value = data.service;
                 document.getElementById("step").value = data.step;
                 document.getElementById("preview-url").value = data.previewUrl || "";
-                document.getElementById("chat-client-name").innerText = `— ${data.clientName}`;
             } else {
                 form.reset();
-                document.getElementById("chat-client-name").innerText = `— Nouveau projet`;
             }
-
-            loadChat(id);
         });
 
-        // Sauvegarder les infos statuts
         document.getElementById("update-form").addEventListener("submit", async (e) => {
             e.preventDefault();
             const data = {
@@ -145,15 +122,21 @@
                 updatedAt: new Date().toISOString()
             };
             await setDoc(doc(db, "orders", currentOrderId), data);
-            alert("Sauvegardé avec succès !");
+            
+            const btn = document.querySelector("#update-form button[type='submit']");
+            btn.innerText = "✓ Sauvegardé";
+            btn.classList.add("bg-green-500", "text-white");
+            setTimeout(() => {
+                btn.innerText = "Enregistrer la commande";
+                btn.classList.remove("bg-green-500", "text-white");
+            }, 2000);
         });
 
-        // Copier le lien
         window.copyLink = () => {
             const url = `${window.location.origin}/suivis?id=${currentOrderId}`;
             navigator.clipboard.writeText(url).then(() => {
                 const btn = document.getElementById("copy-btn");
-                btn.innerText = "Copié !";
+                btn.innerText = "✓ Lien copié !";
                 btn.classList.add("bg-green-500/20", "text-green-400");
                 setTimeout(() => {
                     btn.innerText = "Copier le lien";
@@ -161,64 +144,6 @@
                 }, 2000);
             });
         };
-
-        // GESTION DU CHAT
-        function loadChat(orderId) {
-            if (chatUnsubscribe) chatUnsubscribe(); // Stop previous listener
-            const chatBox = document.getElementById("chat-box");
-            chatBox.innerHTML = "";
-            initialLoad = true;
-
-            const q = query(collection(db, "messages"), where("orderId", "==", orderId), orderBy("timestamp", "asc"));
-            
-            chatUnsubscribe = onSnapshot(q, (snapshot) => {
-                const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-                
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "added") {
-                        const msg = change.doc.data();
-                        const msgTime = msg.timestamp ? msg.timestamp.toMillis() : Date.now();
-                        
-                        // Filtrer historique (1 semaine)
-                        if (msgTime > oneWeekAgo) {
-                            renderMessage(msg.text, msg.sender === "admin", msgTime);
-                            
-                            // Notification push (si nouveau message et venant du client)
-                            if (!initialLoad && msg.sender === "client" && Notification.permission === "granted") {
-                                new Notification("Nouveau message de " + document.getElementById("client-name").value, { body: msg.text });
-                                const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-09.mp3');
-                                audio.play().catch(e => console.log("Audio bloqué"));
-                            }
-                        }
-                    }
-                });
-                
-                chatBox.scrollTop = chatBox.scrollHeight;
-                setTimeout(() => initialLoad = false, 1000);
-            });
-        }
-
-        function renderMessage(text, isAdmin, time) {
-            const div = document.createElement("div");
-            div.className = `max-w-[70%] p-3 rounded-xl text-sm ${isAdmin ? "bg-white text-black self-end rounded-tr-none" : "glass self-start rounded-tl-none"}`;
-            div.innerText = text;
-            document.getElementById("chat-box").appendChild(div);
-        }
-
-        document.getElementById("chat-form").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const input = document.getElementById("chat-input");
-            const text = input.value.trim();
-            if (!text || !currentOrderId) return;
-            
-            input.value = "";
-            await addDoc(collection(db, "messages"), {
-                orderId: currentOrderId,
-                text: text,
-                sender: "admin",
-                timestamp: serverTimestamp()
-            });
-        });
     </script>
 </body>
 </html>
