@@ -20,7 +20,6 @@
     </script>
     <style>
         body { background-color: #050505; color: #fafafa; overflow-x: hidden; }
-        /* Grain premium typique des sites d'agences de luxe */
         .noise-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
         .glass-panel { background: rgba(25, 25, 25, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .text-glow { text-shadow: 0 0 40px rgba(255,255,255,0.3); }
@@ -30,9 +29,45 @@
         .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
-<body class="antialiased selection:bg-white selection:text-black">
+<body class="antialiased selection:bg-white selection:text-black relative">
     <div class="noise-overlay"></div>
 
+    <!-- Modale de Contact (Cachée par défaut) -->
+    <div id="contact-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel p-10 rounded-2xl w-full max-w-lg relative transform scale-95 transition-transform duration-300" id="modal-content">
+            <button onclick="closeContactForm()" class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h2 class="font-display text-2xl font-bold mb-2">Démarrer le projet</h2>
+            <p class="text-sm text-gray-400 mb-8">Parlez-moi de votre entreprise avant de poursuivre sur WhatsApp.</p>
+            
+            <form id="lead-form" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-500 font-bold mb-2">Prénom & Nom</label>
+                        <input type="text" id="lf-nom" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-widest text-gray-500 font-bold mb-2">Adresse E-mail</label>
+                        <input type="email" id="lf-email" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 font-bold mb-2">Nom de l'entreprise</label>
+                    <input type="text" id="lf-entreprise" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 font-bold mb-2">Secteur / Type de Business</label>
+                    <input type="text" id="lf-secteur" placeholder="Ex: Restauration, E-commerce, Agence..." required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white">
+                </div>
+                <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded-lg mt-4 flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors">
+                    Continuer vers WhatsApp <i class="fa-brands fa-whatsapp text-lg"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/5 px-8 py-5">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="font-display font-bold text-xl tracking-wide">ROUIS.</div>
@@ -47,9 +82,7 @@
 
     <!-- Héro -->
     <section class="min-h-screen flex items-center justify-center px-4 relative pt-20">
-        <!-- Spotlight subtil -->
         <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
-        
         <div class="max-w-5xl mx-auto text-center reveal relative z-10">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-[10px] uppercase tracking-[0.2em] mb-8 text-gray-400">
                 <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Studio de développement
@@ -61,7 +94,7 @@
                 Conception et développement d'interfaces web sur-mesure. Une architecture technique robuste au service d'un design immersif.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-6">
-                <button onclick="window.location.href='https://wa.me/21695213460'" class="bg-white text-black px-10 py-4 rounded-full font-medium text-sm hover:scale-105 transition-transform flex items-center justify-center gap-3">
+                <button onclick="openContactForm('Je souhaite démarrer un projet de création de site web.')" class="bg-white text-black px-10 py-4 rounded-full font-medium text-sm hover:scale-105 transition-transform flex items-center justify-center gap-3">
                     Démarrer un projet <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
@@ -78,7 +111,7 @@
 
             <div class="grid md:grid-cols-2 gap-6">
                 <!-- Pack 300 -->
-                <div class="glass-panel p-10 hover-lift group cursor-pointer" onclick="window.location.href='https://wa.me/21695213460?text=Je souhaite réserver le module Essentiel'">
+                <div class="glass-panel p-10 hover-lift group cursor-pointer" onclick="openContactForm('Je souhaite réserver le module L\'Essentiel (300€)')">
                     <div class="flex justify-between items-start mb-16">
                         <h3 class="font-display text-2xl font-bold">L'Essentiel</h3>
                         <span class="text-xl font-light text-gray-400">300€</span>
@@ -92,7 +125,7 @@
                 </div>
 
                 <!-- Pack 700 -->
-                <div class="glass-panel p-10 hover-lift group cursor-pointer bg-white/5" onclick="window.location.href='https://wa.me/21695213460?text=Je souhaite réserver le module Pro Business'">
+                <div class="glass-panel p-10 hover-lift group cursor-pointer bg-white/5" onclick="openContactForm('Je souhaite réserver le module Pro Business (700€)')">
                     <div class="flex justify-between items-start mb-16">
                         <h3 class="font-display text-2xl font-bold">Pro Business</h3>
                         <span class="text-xl font-light text-white">700€</span>
@@ -117,12 +150,52 @@
     </footer>
 
     <script>
+        // Logique d'affichage des éléments au scroll
         document.addEventListener("DOMContentLoaded", () => {
             const reveals = document.querySelectorAll(".reveal");
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add("active"); });
             }, { threshold: 0.1 });
             reveals.forEach(reveal => observer.observe(reveal));
+        });
+
+        // Logique du Formulaire & WhatsApp
+        let currentPackMessage = "";
+        const modal = document.getElementById('contact-modal');
+        const modalContent = document.getElementById('modal-content');
+
+        function openContactForm(message) {
+            currentPackMessage = message;
+            modal.classList.remove('hidden');
+            // Petit délai pour l'animation d'apparition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeContactForm() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        document.getElementById('lead-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nom = document.getElementById('lf-nom').value;
+            const email = document.getElementById('lf-email').value;
+            const entreprise = document.getElementById('lf-entreprise').value;
+            const secteur = document.getElementById('lf-secteur').value;
+
+            // Construction du message WhatsApp
+            const finalMessage = `${currentPackMessage}\n\n*📌 Informations Client :*\n- *Nom :* ${nom}\n- *Email :* ${email}\n- *Entreprise :* ${entreprise}\n- *Secteur :* ${secteur}`;
+
+            const numero = "21695213460";
+            window.open(`https://wa.me/${numero}?text=${encodeURIComponent(finalMessage)}`, "_blank");
+            closeContactForm();
+            e.target.reset(); // Vide le formulaire
         });
     </script>
 </body>
