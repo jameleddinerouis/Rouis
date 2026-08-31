@@ -3,135 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROUIS | Création de Sites Web d'Exception</title>
-    
+    <title>ROUIS | Studio Digital Indépendant</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        display: ['"Syne"', 'sans-serif'],
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Syne', 'sans-serif'] },
+                    colors: { brand: { dark: '#050505', gray: '#111111', light: '#fafafa' } }
                 }
             }
         }
     </script>
-
     <style>
-        body { background-color: #030303; color: #f5f5f7; overflow-x: hidden; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.4s ease, border-color 0.4s ease;
-        }
-        .glass-card:hover { transform: translateY(-5px); border-color: rgba(255, 255, 255, 0.2); }
-        .text-gradient { background: linear-gradient(135deg, #fff 0%, #a5a5a5 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .text-gradient-accent { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s ease; }
+        body { background-color: #050505; color: #fafafa; overflow-x: hidden; }
+        /* Grain premium typique des sites d'agences de luxe */
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+        .glass-panel { background: rgba(25, 25, 25, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .text-glow { text-shadow: 0 0 40px rgba(255,255,255,0.3); }
+        .hover-lift { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease; }
+        .hover-lift:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.2); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .glow-orb-1 { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%); top: -200px; left: -200px; border-radius: 50%; z-index: -1; }
-        .glow-orb-2 { position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, rgba(0,0,0,0) 70%); bottom: -300px; right: -200px; border-radius: 50%; z-index: -1; }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased selection:bg-white selection:text-black">
+    <div class="noise-overlay"></div>
 
-    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div class="glow-orb-1"></div>
-        <div class="glow-orb-2"></div>
-    </div>
-
-    <!-- Navigation Modifiée avec le bouton Espace Client -->
-    <nav class="fixed top-0 w-full z-50 glass-card px-6 py-4">
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/5 px-8 py-5">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="font-display font-bold text-2xl">ROUIS<span class="text-blue-500">.</span></div>
-            
-            <div class="hidden md:flex gap-8 text-sm font-medium items-center">
-                <a href="#offres" class="text-gray-400 hover:text-white transition-colors">Offres</a>
-                <a href="/suivis" class="text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2">
-                    <i class="fa-solid fa-user-lock"></i> Espace Client
+            <div class="font-display font-bold text-xl tracking-wide">ROUIS.</div>
+            <div class="hidden md:flex gap-10 text-xs uppercase tracking-widest text-gray-400 font-medium items-center">
+                <a href="#expertises" class="hover:text-white transition-colors">Expertises</a>
+                <a href="/suivis" class="text-white hover:text-gray-300 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-circle text-[8px] animate-pulse"></i> Espace Client
                 </a>
             </div>
-
-            <button onclick="contactWhatsApp()" class="bg-white text-black px-5 py-2.5 rounded-full text-sm font-bold hover:scale-105 transition-transform flex items-center gap-2">
-                <i class="fa-brands fa-whatsapp text-lg"></i> Démarrer
-            </button>
         </div>
     </nav>
 
     <!-- Héro -->
-    <section class="min-h-screen flex items-center justify-center pt-20 px-4">
-        <div class="max-w-5xl mx-auto text-center reveal">
-            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6">Des sites web qui <br> <span class="text-gradient">marquent les esprits.</span></h1>
-            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">Je conçois des expériences digitales sur-mesure, ultra-rapides et pensées pour convertir.</p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <button onclick='contactWhatsApp("Je souhaite discuter de mon projet de site web")' class="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:shadow-[0_0_40px_rgba(139,92,246,0.5)]">
-                    Réserver une consultation
+    <section class="min-h-screen flex items-center justify-center px-4 relative pt-20">
+        <!-- Spotlight subtil -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
+        
+        <div class="max-w-5xl mx-auto text-center reveal relative z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-[10px] uppercase tracking-[0.2em] mb-8 text-gray-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Studio de développement
+            </div>
+            <h1 class="font-display text-5xl md:text-7xl lg:text-[90px] font-bold tracking-tighter leading-[1.05] mb-8 text-glow">
+                L'art de la présence numérique.
+            </h1>
+            <p class="text-lg text-gray-400 max-w-xl mx-auto mb-12 font-light leading-relaxed">
+                Conception et développement d'interfaces web sur-mesure. Une architecture technique robuste au service d'un design immersif.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <button onclick="window.location.href='https://wa.me/21695213460'" class="bg-white text-black px-10 py-4 rounded-full font-medium text-sm hover:scale-105 transition-transform flex items-center justify-center gap-3">
+                    Démarrer un projet <i class="fa-solid fa-arrow-right"></i>
                 </button>
-                <a href="#offres" class="px-8 py-4 rounded-full font-bold text-lg border border-white/20 hover:bg-white/5 transition-colors">Découvrir les offres</a>
             </div>
         </div>
     </section>
 
-    <!-- Offres -->
-    <section id="offres" class="min-h-screen flex items-center py-24 px-4 border-t border-white/5">
+    <!-- Expertises -->
+    <section id="expertises" class="py-32 px-4 border-t border-white/5 relative">
         <div class="max-w-7xl mx-auto w-full reveal">
-            <div class="text-center mb-16">
-                <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">Des fondations <span class="text-gradient-accent">solides</span>.</h2>
+            <div class="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                <h2 class="font-display text-4xl md:text-6xl font-bold tracking-tighter">Signatures<br>Techniques.</h2>
+                <p class="text-gray-400 max-w-sm text-sm">Une tarification claire pour des solutions digitales complètes, de la direction artistique au déploiement.</p>
             </div>
-            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+
+            <div class="grid md:grid-cols-2 gap-6">
                 <!-- Pack 300 -->
-                <div class="glass-card rounded-3xl p-8 md:p-10">
-                    <h3 class="font-display text-2xl font-bold mb-2">L'Essentiel</h3>
-                    <div class="flex items-baseline gap-1 mb-6"><span class="text-4xl font-bold">300€</span></div>
-                    <ul class="space-y-4 mb-10">
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-500"></i> Design sur-mesure (3 à 5 pages)</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-500"></i> 100% Responsive</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-500"></i> Formulaire de contact</li>
+                <div class="glass-panel p-10 hover-lift group cursor-pointer" onclick="window.location.href='https://wa.me/21695213460?text=Je souhaite réserver le module Essentiel'">
+                    <div class="flex justify-between items-start mb-16">
+                        <h3 class="font-display text-2xl font-bold">L'Essentiel</h3>
+                        <span class="text-xl font-light text-gray-400">300€</span>
+                    </div>
+                    <ul class="space-y-4 mb-12 text-sm text-gray-400">
+                        <li class="flex gap-4"><span class="text-white">—</span> Interface vitrine sur-mesure (3-5 pages)</li>
+                        <li class="flex gap-4"><span class="text-white">—</span> Architecture Responsive & Mobile-First</li>
+                        <li class="flex gap-4"><span class="text-white">—</span> Optimisation des performances front-end</li>
                     </ul>
-                    <button onclick='contactWhatsApp("Je suis interesse par le pack Essentiel a 300 euros")' class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 font-semibold border border-white/10 transition-colors">Sélectionner ce pack</button>
+                    <div class="text-xs uppercase tracking-widest font-bold group-hover:text-gray-300 transition-colors">Réserver ce module <i class="fa-solid fa-arrow-right ml-2"></i></div>
                 </div>
+
                 <!-- Pack 700 -->
-                <div class="glass-card rounded-3xl p-8 md:p-10 border-blue-500/30">
-                    <h3 class="font-display text-2xl font-bold mb-2">Pro Business</h3>
-                    <div class="flex items-baseline gap-1 mb-6"><span class="text-4xl font-bold">700€</span></div>
-                    <ul class="space-y-4 mb-10">
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-violet-400"></i> L'Essentiel inclus</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-violet-400"></i> Jusqu'à 10 pages dynamiques</li>
-                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-violet-400"></i> Espace Gestion de contenu</li>
+                <div class="glass-panel p-10 hover-lift group cursor-pointer bg-white/5" onclick="window.location.href='https://wa.me/21695213460?text=Je souhaite réserver le module Pro Business'">
+                    <div class="flex justify-between items-start mb-16">
+                        <h3 class="font-display text-2xl font-bold">Pro Business</h3>
+                        <span class="text-xl font-light text-white">700€</span>
+                    </div>
+                    <ul class="space-y-4 mb-12 text-sm text-gray-400">
+                        <li class="flex gap-4"><span class="text-white">—</span> Tout ce qui est inclus dans L'Essentiel</li>
+                        <li class="flex gap-4"><span class="text-white">—</span> Architecture dynamique (jusqu'à 10 pages)</li>
+                        <li class="flex gap-4"><span class="text-white">—</span> Espace d'administration personnalisé</li>
+                        <li class="flex gap-4"><span class="text-white">—</span> Animations fluides & Design d'interaction</li>
                     </ul>
-                    <button onclick='contactWhatsApp("Je suis interesse par le pack Pro Business a 700 euros")' class="w-full py-3 rounded-xl bg-white text-black hover:bg-gray-200 font-bold transition-colors">Sélectionner ce pack</button>
+                    <div class="text-xs uppercase tracking-widest font-bold text-white group-hover:text-gray-300 transition-colors">Réserver ce module <i class="fa-solid fa-arrow-right ml-2"></i></div>
                 </div>
             </div>
         </div>
     </section>
+
+    <footer class="border-t border-white/5 py-12 px-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center text-xs font-medium text-gray-500 uppercase tracking-widest">
+            <span>© 2026 Rouis</span>
+            <span>Tunis, TN</span>
+        </div>
+    </footer>
 
     <script>
-        function contactWhatsApp(customMessage = "Bonjour Rouis, je souhaite créer un site web d'exception !") {
-            const numero = "21695213460"; 
-            const message = encodeURIComponent(customMessage);
-            window.open(`https://wa.me/${numero}?text=${message}`, "_blank");
-        }
-
         document.addEventListener("DOMContentLoaded", () => {
             const reveals = document.querySelectorAll(".reveal");
-            const revealOnScroll = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("active");
-                        observer.unobserve(entry.target);
-                    }
-                });
-            });
-            reveals.forEach(reveal => revealOnScroll.observe(reveal));
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add("active"); });
+            }, { threshold: 0.1 });
+            reveals.forEach(reveal => observer.observe(reveal));
         });
     </script>
 </body>
