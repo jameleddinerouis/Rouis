@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi de votre projet | ROUIS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { background-color: #030303; color: #f5f5f7; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-display { font-family: 'Syne', sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .step-active { background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.5); }
+        .step-done { background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.3); }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-black to-black">
+
+    <div class="glass-card max-w-lg w-full rounded-[30px] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+        
+        <!-- Écran de chargement -->
+        <div id="loading" class="text-center py-10">
+            <div class="w-10 h-10 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-gray-400">Recherche de votre dossier...</p>
+        </div>
+
+        <!-- Contenu de la commande -->
+        <div id="content" class="hidden">
+            <div class="text-center border-b border-white/10 pb-6 mb-8">
+                <h1 class="font-display text-sm text-gray-400 uppercase tracking-widest mb-2">Espace Client</h1>
+                <h2 class="text-2xl font-bold text-white mb-1" id="c-name">Nom</h2>
+                <p class="text-blue-400 font-medium text-sm" id="c-service">Service</p>
+            </div>
+
+            <div class="space-y-4" id="steps-container">
+                <!-- Généré en JS -->
+            </div>
+
+            <!-- Bouton Démo (s'affiche que si l'admin a mis un lien) -->
+            <div id="demo-box" class="hidden mt-8">
+                <a id="c-demo-link" href="#" target="_blank" class="w-full flex items-center justify-center gap-3 bg-white text-black hover:bg-gray-200 py-4 rounded-xl font-bold transition-colors">
+                    <i class="fa-solid fa-rocket"></i> Voir la prévisualisation
+                </a>
+            </div>
+
+            <div class="mt-8 text-center">
+                <p class="text-sm text-gray-500 mb-3">Une question sur l'avancement ?</p>
+                <a href="https://wa.me/21695213460" target="_blank" class="inline-flex items-center gap-2 text-green-400 hover:text-green-300 font-medium text-sm">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Contacter Rouis
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de récupération Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // MÊME CONFIG QUE L'ADMIN ICI
+        const firebaseConfig = {
+            apiKey: "TA_CLE_API_FIREBASE",
+            authDomain: "ton-projet.firebaseapp.com",
+            projectId: "ton-projet",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const stepsLabels = [
+            "Stratégie & Brief validé",
+            "Maquette & Design UI/UX",
+            "Développement & Intégration",
+            "Terminé & Prêt au lancement"
+        ];
+
+        async function fetchOrder() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get("id");
+
+            if (!orderId) {
+                document.getElementById("loading").innerHTML = "<p class='text-red-400'>Erreur : Aucun lien de commande fourni.</p>";
+                return;
+            }
+
+            try {
+                const docRef = doc(db, "orders", orderId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    
+                    document.getElementById("loading").classList.add("hidden");
+                    document.getElementById("content").classList.remove("hidden");
+
+                    document.getElementById("c-name").innerText = `Bonjour, ${data.clientName}`;
+                    document.getElementById("c-service").innerText = data.service;
+
+                    // Génération des étapes visuelles
+                    const container = document.getElementById("steps-container");
+                    stepsLabels.forEach((label, index) => {
+                        const stepNum = index + 1;
+                        const isDone = stepNum < data.step;
+                        const isCurrent = stepNum === data.step;
+                        const isPending = stepNum > data.step;
+
+                        let styleClass = "border border-white/5 opacity-50";
+                        let icon = `<span class="w-6 h-6 flex items-center justify-center rounded-full bg-white/10 text-xs">${stepNum}</span>`;
+
+                        if (isDone) {
+                            styleClass = "step-done text-white";
+                            icon = `<i class="fa-solid fa-circle-check text-green-400 text-xl"></i>`;
+                        } else if (isCurrent) {
+                            styleClass = "step-active text-white scale-[1.02] shadow-lg shadow-blue-500/10";
+                            icon = `<span class="relative flex h-4 w-4"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-4 w-4 bg-blue-500"></span></span>`;
+                        }
+
+                        container.innerHTML += `
+                            <div class="flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 ${styleClass}">
+                                <div class="w-8 flex justify-center">${icon}</div>
+                                <span class="font-medium text-sm md:text-base">${label}</span>
+                            </div>
+                        `;
+                    });
+
+                    // Bouton demo
+                    if (data.previewUrl && data.previewUrl.trim() !== "") {
+                        document.getElementById("demo-box").classList.remove("hidden");
+                        document.getElementById("c-demo-link").href = data.previewUrl;
+                    }
+
+                } else {
+                    document.getElementById("loading").innerHTML = "<p class='text-red-400'>Commande introuvable. Vérifiez votre lien.</p>";
+                }
+            } catch (error) {
+                console.error("Erreur Firebase:", error);
+                document.getElementById("loading").innerHTML = "<p class='text-gray-400'>Connexion à la base de données en cours...</p>";
+            }
+        }
+
+        fetchOrder();
+    </script>
+</body>
+</html>
