@@ -12,14 +12,13 @@
         .font-display { font-family: 'Syne', sans-serif; }
         .glass { background: rgba(25, 25, 25, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); }
         .step-active { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); }
-        .step-done { opacity: 0.5; }
-        .chat-scroll::-webkit-scrollbar { width: 0px; }
+        .step-done { opacity: 0.4; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 relative bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-900 via-[#050505] to-[#050505]">
 
     <a href="/" class="absolute top-6 left-6 text-gray-500 hover:text-white transition-colors text-sm font-medium">
-        <i class="fa-solid fa-arrow-left"></i> Retour
+        <i class="fa-solid fa-arrow-left"></i> Retour au site
     </a>
 
     <!-- Login Box -->
@@ -28,50 +27,37 @@
         <p class="text-gray-400 text-sm mb-8">Connexion à votre espace de suivi de projet.</p>
         
         <form id="track-form" class="space-y-4">
-            <input type="text" id="track-id-input" placeholder="ID Commande" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-center focus:outline-none">
+            <input type="text" id="track-id-input" placeholder="ID Commande" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-center focus:outline-none text-white">
             <button type="submit" class="w-full bg-white text-black font-medium py-3 rounded-lg">Accéder</button>
         </form>
     </div>
 
-    <!-- Dashboard Client (Grille 2 colonnes sur grand écran) -->
-    <div id="content" class="w-full max-w-5xl h-[80vh] flex flex-col md:flex-row gap-6 hidden">
-        
-        <!-- Colonne Statut -->
-        <div class="glass flex-1 rounded-2xl p-8 flex flex-col overflow-y-auto">
-            <h1 class="font-display text-xs text-gray-500 uppercase tracking-widest mb-1">Dossier Actif</h1>
-            <h2 class="text-2xl font-bold mb-8" id="c-name">Chargement...</h2>
-
-            <div class="space-y-3 flex-1" id="steps-container"></div>
-
-            <div id="demo-box" class="hidden mt-8 pt-6 border-t border-white/5">
-                <a id="c-demo-link" href="#" target="_blank" class="block w-full text-center bg-white text-black py-3 rounded-lg font-medium text-sm">
-                    Visualiser la Démo
-                </a>
-            </div>
+    <!-- Dashboard Client -->
+    <div id="content" class="glass max-w-xl w-full rounded-2xl p-10 hidden relative">
+        <div class="text-center border-b border-white/5 pb-8 mb-8">
+            <h1 class="font-display text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-2">Dossier Actif</h1>
+            <h2 class="text-3xl font-display font-bold mb-1" id="c-name">Chargement...</h2>
+            <p class="text-gray-400 text-sm" id="c-service"></p>
         </div>
 
-        <!-- Colonne Chat -->
-        <div class="glass flex-1 rounded-2xl flex flex-col overflow-hidden relative">
-            <div class="p-6 border-b border-white/5">
-                <h3 class="text-sm font-medium flex items-center gap-2">
-                    <span class="w-2 h-2 bg-green-500 rounded-full"></span> Discussion avec Rouis Studio
-                </h3>
-            </div>
-            
-            <div id="chat-box" class="flex-1 p-6 overflow-y-auto chat-scroll flex flex-col gap-4">
-                <!-- Les messages s'affichent ici -->
-            </div>
+        <div class="space-y-4" id="steps-container"></div>
 
-            <form id="chat-form" class="p-4 border-t border-white/5 bg-[#0a0a0a] flex gap-2">
-                <input type="text" id="chat-input" placeholder="Votre message..." autocomplete="off" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none">
-                <button type="submit" class="bg-white text-black rounded-lg px-4 py-2"><i class="fa-solid fa-paper-plane"></i></button>
-            </form>
+        <div id="demo-box" class="hidden mt-10 pt-8 border-t border-white/5">
+            <a id="c-demo-link" href="#" target="_blank" class="block w-full text-center bg-white text-black py-4 rounded-xl font-bold text-sm hover:scale-[1.02] transition-transform">
+                Visualiser la Démo du Site
+            </a>
+        </div>
+
+        <div class="mt-10 text-center">
+            <a href="https://wa.me/21695213460" target="_blank" class="inline-flex items-center gap-2 text-xs font-medium text-gray-400 hover:text-white transition-colors">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Contacter Rouis Studio
+            </a>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA2TfFM8S6sKtbM_t39YQlEe-um_VlkRI4",
@@ -84,117 +70,53 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        
-        let currentOrderId = null;
-        let initialLoad = true;
         const stepsLabels = ["Stratégie & Brief", "Design UI/UX", "Développement Web", "Phase de Livraison"];
-
-        // Demander permission notifications
-        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
-            Notification.requestPermission();
-        }
 
         document.getElementById("track-form").addEventListener("submit", (e) => {
             e.preventDefault();
             window.location.href = `/suivis?id=${document.getElementById("track-id-input").value.trim()}`;
         });
 
-        async function initDashboard() {
+        function initDashboard() {
             const orderId = new URLSearchParams(window.location.search).get("id");
             if (!orderId) {
                 document.getElementById("login-box").classList.remove("hidden");
                 return;
             }
 
-            currentOrderId = orderId;
-            const docSnap = await getDoc(doc(db, "orders", orderId));
+            // Écoute en temps réel de la progression
+            onSnapshot(doc(db, "orders", orderId), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById("content").classList.remove("hidden");
+                    document.getElementById("c-name").innerText = data.clientName;
+                    document.getElementById("c-service").innerText = data.service;
 
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                document.getElementById("content").classList.remove("hidden");
-                document.getElementById("c-name").innerText = data.clientName;
-
-                // Générer progression
-                const container = document.getElementById("steps-container");
-                stepsLabels.forEach((label, index) => {
-                    const stepNum = index + 1;
-                    const isDone = stepNum < data.step;
-                    const isCurrent = stepNum === data.step;
+                    const container = document.getElementById("steps-container");
+                    container.innerHTML = ""; // Vider avant de reconstruire
                     
-                    const div = document.createElement('div');
-                    div.className = `p-4 rounded-lg flex items-center gap-4 text-sm ${isCurrent ? 'step-active font-medium' : isDone ? 'step-done' : 'opacity-30 border border-white/5'}`;
-                    div.innerHTML = `<span class="w-6 h-6 flex items-center justify-center rounded-full bg-white/10 text-xs">${isDone ? '✓' : stepNum}</span> ${label}`;
-                    container.appendChild(div);
-                });
-
-                if (data.previewUrl) {
-                    document.getElementById("demo-box").classList.remove("hidden");
-                    document.getElementById("c-demo-link").href = data.previewUrl;
-                }
-
-                initChat();
-
-                // Listener en temps réel sur le changement d'étape
-                onSnapshot(doc(db, "orders", orderId), (doc) => {
-                    if (!initialLoad && Notification.permission === "granted" && doc.data().step !== data.step) {
-                        new Notification("Mise à jour du projet", { body: "Votre projet est passé à une nouvelle étape !" });
-                    }
-                });
-
-            } else {
-                document.getElementById("login-box").classList.remove("hidden");
-                alert("Identifiant incorrect.");
-            }
-        }
-
-        // Système de Chat Client
-        function initChat() {
-            const chatBox = document.getElementById("chat-box");
-            const q = query(collection(db, "messages"), where("orderId", "==", currentOrderId), orderBy("timestamp", "asc"));
-            
-            onSnapshot(q, (snapshot) => {
-                const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-                
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "added") {
-                        const msg = change.doc.data();
-                        const msgTime = msg.timestamp ? msg.timestamp.toMillis() : Date.now();
+                    stepsLabels.forEach((label, index) => {
+                        const stepNum = index + 1;
+                        const isDone = stepNum < data.step;
+                        const isCurrent = stepNum === data.step;
                         
-                        if (msgTime > oneWeekAgo) {
-                            const isClient = msg.sender === "client";
-                            const div = document.createElement("div");
-                            div.className = `max-w-[80%] p-3 rounded-lg text-sm ${isClient ? "bg-white text-black self-end rounded-tr-none" : "bg-white/10 self-start rounded-tl-none"}`;
-                            div.innerText = msg.text;
-                            chatBox.appendChild(div);
-                            
-                            // Notification pour un message du studio
-                            if (!initialLoad && !isClient && Notification.permission === "granted") {
-                                new Notification("Nouveau message de Rouis", { body: msg.text });
-                                const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-09.mp3');
-                                audio.play().catch(e => {});
-                            }
-                        }
+                        const div = document.createElement('div');
+                        div.className = `p-5 rounded-xl flex items-center gap-4 text-sm ${isCurrent ? 'step-active font-medium' : isDone ? 'step-done' : 'opacity-20 border border-white/5'}`;
+                        div.innerHTML = `<span class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-xs">${isDone ? '✓' : stepNum}</span> ${label}`;
+                        container.appendChild(div);
+                    });
+
+                    if (data.previewUrl) {
+                        document.getElementById("demo-box").classList.remove("hidden");
+                        document.getElementById("c-demo-link").href = data.previewUrl;
                     }
-                });
-                chatBox.scrollTop = chatBox.scrollHeight;
-                setTimeout(() => initialLoad = false, 1000);
+                } else {
+                    document.getElementById("content").classList.add("hidden");
+                    document.getElementById("login-box").classList.remove("hidden");
+                    alert("Identifiant incorrect ou commande introuvable.");
+                }
             });
         }
-
-        document.getElementById("chat-form").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const input = document.getElementById("chat-input");
-            if (!input.value.trim() || !currentOrderId) return;
-            
-            const text = input.value;
-            input.value = "";
-            await addDoc(collection(db, "messages"), {
-                orderId: currentOrderId,
-                text: text,
-                sender: "client",
-                timestamp: serverTimestamp()
-            });
-        });
 
         initDashboard();
     </script>
