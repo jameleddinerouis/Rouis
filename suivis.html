@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suivi de votre projet | ROUIS</title>
+    <title>Espace Client | ROUIS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -15,33 +15,57 @@
         .step-done { background: rgba(34, 197, 94, 0.05); border-color: rgba(34, 197, 94, 0.3); }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex items-center justify-center p-4 relative">
 
-    <div class="glass-card max-w-lg w-full rounded-[30px] p-8 md:p-12 shadow-2xl relative">
-        <div id="loading" class="text-center py-10">
-            <p class="text-gray-400">Recherche de votre dossier...</p>
+    <!-- Bouton retour -->
+    <a href="/" class="absolute top-6 left-6 text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i> Retour au site
+    </a>
+
+    <!-- Écran de connexion (S'affiche si aucun ID n'est renseigné) -->
+    <div id="login-box" class="glass-card max-w-sm w-full rounded-[30px] p-8 md:p-10 shadow-2xl text-center hidden">
+        <div class="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-500 text-2xl">
+            <i class="fa-solid fa-user-lock"></i>
+        </div>
+        <h1 class="font-display text-2xl font-bold text-white mb-2">Espace Client</h1>
+        <p class="text-gray-400 text-sm mb-8">Entrez votre identifiant de commande pour suivre l'avancement de votre projet.</p>
+        
+        <form id="track-form" class="space-y-4">
+            <input type="text" id="track-id-input" placeholder="Ex: CMD-123" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 text-center font-mono">
+            <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-bold py-3 rounded-xl transition-colors">
+                Accéder à mon projet
+            </button>
+        </form>
+    </div>
+
+    <!-- Écran de chargement -->
+    <div id="loading" class="text-center py-10 hidden">
+        <div class="w-10 h-10 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+        <p class="text-gray-400" id="loading-text">Recherche de votre dossier...</p>
+    </div>
+
+    <!-- Tableau de bord de Suivi -->
+    <div id="content" class="glass-card max-w-lg w-full rounded-[30px] p-8 md:p-12 shadow-2xl hidden">
+        <div class="text-center border-b border-white/10 pb-6 mb-8 relative">
+            <h1 class="font-display text-sm text-gray-400 uppercase tracking-widest mb-2">Tableau de bord</h1>
+            <h2 class="text-2xl font-bold text-white mb-1" id="c-name">Nom</h2>
+            <p class="text-blue-400 font-medium text-sm" id="c-service">Service</p>
         </div>
 
-        <div id="content" class="hidden">
-            <div class="text-center border-b border-white/10 pb-6 mb-8">
-                <h1 class="font-display text-sm text-gray-400 uppercase tracking-widest mb-2">Espace Client</h1>
-                <h2 class="text-2xl font-bold text-white mb-1" id="c-name">Nom</h2>
-                <p class="text-blue-400 font-medium text-sm" id="c-service">Service</p>
-            </div>
+        <div class="space-y-4" id="steps-container"></div>
 
-            <div class="space-y-4" id="steps-container"></div>
-
-            <div id="demo-box" class="hidden mt-8">
-                <a id="c-demo-link" href="#" target="_blank" class="w-full flex items-center justify-center gap-3 bg-white text-black hover:bg-gray-200 py-4 rounded-xl font-bold transition-colors">
-                    <i class="fa-solid fa-rocket"></i> Voir la prévisualisation
-                </a>
-            </div>
-            
-            <div class="mt-8 text-center">
-                <a href="https://wa.me/21695213460" target="_blank" class="inline-flex items-center gap-2 text-green-400 hover:text-green-300 font-medium text-sm">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> Contacter Rouis
-                </a>
-            </div>
+        <div id="demo-box" class="hidden mt-8">
+            <a id="c-demo-link" href="#" target="_blank" class="w-full flex items-center justify-center gap-3 bg-white text-black hover:bg-gray-200 py-4 rounded-xl font-bold transition-colors">
+                <i class="fa-solid fa-rocket"></i> Voir la prévisualisation
+            </a>
+        </div>
+        
+        <!-- Module Message Interne -->
+        <div class="mt-8 pt-6 border-t border-white/10 text-center">
+            <p class="text-sm text-gray-400 mb-3">Besoin d'échanger sur le projet ?</p>
+            <a href="https://wa.me/21695213460" target="_blank" class="inline-flex items-center gap-2 text-white bg-white/5 border border-white/10 px-6 py-3 rounded-full hover:bg-white/10 transition-colors font-medium text-sm">
+                <i class="fa-solid fa-paper-plane text-blue-400"></i> Laisser un message à Rouis
+            </a>
         </div>
     </div>
 
@@ -49,12 +73,14 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // IMPORTANT : METTRE EXACTEMENT LES MÊMES CLÉS QUE DANS ADMIN.HTML
         const firebaseConfig = {
-    apiKey: "AIzaSyA2TfFM8S6sKtbM_t39YQlEe-um_VlkRI4",
-    authDomain: "rouis-b6207.firebaseapp.com",
-    projectId: "rouis-b6207"
-};
+            apiKey: "AIzaSyA2TfFM8S6sKtbM_t39YQlEe-um_VlkRI4",
+            authDomain: "rouis-b6207.firebaseapp.com",
+            projectId: "rouis-b6207",
+            storageBucket: "rouis-b6207.firebasestorage.app",
+            messagingSenderId: "838016233763",
+            appId: "1:838016233763:web:bab963985f737a9bd69c96"
+        };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -66,14 +92,25 @@
             "Terminé & Prêt au lancement"
         ];
 
+        // Gérer le formulaire de connexion
+        document.getElementById("track-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const id = document.getElementById("track-id-input").value.trim();
+            window.location.href = `/suivis?id=${id}`;
+        });
+
+        // Charger la commande
         async function fetchOrder() {
             const urlParams = new URLSearchParams(window.location.search);
             const orderId = urlParams.get("id");
 
+            // Si pas d'ID, on affiche l'écran de connexion
             if (!orderId) {
-                document.getElementById("loading").innerHTML = "<p class='text-red-400'>Erreur : Aucun ID de commande.</p>";
+                document.getElementById("login-box").classList.remove("hidden");
                 return;
             }
+
+            document.getElementById("loading").classList.remove("hidden");
 
             try {
                 const docRef = doc(db, "orders", orderId);
@@ -114,12 +151,19 @@
                         document.getElementById("c-demo-link").href = data.previewUrl;
                     }
                 } else {
-                    document.getElementById("loading").innerHTML = "<p class='text-red-400'>Commande introuvable.</p>";
+                    document.getElementById("loading").classList.add("hidden");
+                    document.getElementById("login-box").classList.remove("hidden");
+                    const errorP = document.createElement("p");
+                    errorP.className = "text-red-400 text-sm mt-4";
+                    errorP.innerText = "Commande introuvable. Vérifiez l'ID.";
+                    document.getElementById("track-form").appendChild(errorP);
                 }
             } catch (error) {
-                document.getElementById("loading").innerHTML = "<p class='text-red-400'>Erreur de connexion à la base.</p>";
+                document.getElementById("loading-text").innerText = "Erreur de connexion.";
+                document.getElementById("loading-text").classList.add("text-red-400");
             }
         }
+        
         fetchOrder();
     </script>
 </body>
