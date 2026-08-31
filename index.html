@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROUIS | Studio Digital Indépendant</title>
+    <title>ROUIS | Studio Digital & Créatif - Paris</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <script>
@@ -13,144 +13,301 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Syne', 'sans-serif'] },
-                    colors: { brand: { dark: '#050505', gray: '#111111', light: '#fafafa' } }
+                    colors: { brand: { dark: '#030303', gray: '#0a0a0a', light: '#fafafa' } },
+                    animation: {
+                        'marquee': 'marquee 25s linear infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        }
+                    }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #050505; color: #fafafa; overflow-x: hidden; }
-        .noise-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
-        .glass-panel { background: rgba(25, 25, 25, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .text-glow { text-shadow: 0 0 40px rgba(255,255,255,0.3); }
+        body { background-color: #030303; color: #fafafa; overflow-x: hidden; }
+        /* Grain premium */
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; opacity: 0.035; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+        .glass-panel { background: rgba(20, 20, 20, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-card { background: linear-gradient(180deg, rgba(30,30,30,0.4) 0%, rgba(15,15,15,0.4) 100%); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .text-glow { text-shadow: 0 0 40px rgba(255,255,255,0.2); }
         .hover-lift { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease; }
         .hover-lift:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.2); }
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        /* Cacher la scrollbar du marquee */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="antialiased selection:bg-white selection:text-black relative">
     <div class="noise-overlay"></div>
 
-    <!-- Modale de Contact (Cachée par défaut) -->
-    <div id="contact-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="glass-panel p-10 rounded-2xl w-full max-w-lg relative transform scale-95 transition-transform duration-300" id="modal-content">
+    <!-- Modale de Contact -->
+    <div id="contact-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 p-4">
+        <div class="glass-panel p-8 md:p-10 rounded-2xl w-full max-w-lg relative transform scale-95 transition-transform duration-300" id="modal-content">
             <button onclick="closeContactForm()" class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
             <h2 class="font-display text-2xl font-bold mb-2">Démarrer le projet</h2>
-            <p class="text-sm text-gray-400 mb-8">Parlez-moi de votre entreprise avant de poursuivre sur WhatsApp.</p>
+            <p class="text-sm text-gray-400 mb-8">Parlez-nous de votre entreprise avant de poursuivre sur WhatsApp.</p>
             
             <form id="lead-form" class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs uppercase tracking-widest text-gray-500 font-bold mb-2">Prénom & Nom</label>
-                        <input type="text" id="lf-nom" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white">
+                        <label class="block text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-2 pl-1">Prénom & Nom</label>
+                        <input type="text" id="lf-nom" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white transition-colors">
                     </div>
                     <div>
-                        <label class="block text-xs uppercase tracking-widest text-gray-500 font-bold mb-2">Adresse E-mail</label>
-                        <input type="email" id="lf-email" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white">
+                        <label class="block text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-2 pl-1">Adresse E-mail</label>
+                        <input type="email" id="lf-email" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white transition-colors">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-500 font-bold mb-2">Nom de l'entreprise</label>
-                    <input type="text" id="lf-entreprise" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white">
+                    <label class="block text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-2 pl-1">Nom de l'entreprise</label>
+                    <input type="text" id="lf-entreprise" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white transition-colors">
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-500 font-bold mb-2">Secteur / Type de Business</label>
-                    <input type="text" id="lf-secteur" placeholder="Ex: Restauration, E-commerce, Agence..." required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white">
+                    <label class="block text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-2 pl-1">Secteur / Activité</label>
+                    <input type="text" id="lf-secteur" placeholder="Ex: E-commerce, Restauration..." required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white transition-colors">
                 </div>
-                <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded-lg mt-4 flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors">
-                    Continuer vers WhatsApp <i class="fa-brands fa-whatsapp text-lg"></i>
+                <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded-lg mt-6 flex items-center justify-center gap-3 hover:bg-gray-200 transition-colors">
+                    Continuer sur WhatsApp <i class="fa-brands fa-whatsapp text-xl"></i>
                 </button>
             </form>
         </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/5 px-8 py-5">
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/5 px-6 py-4 md:px-10">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="font-display font-bold text-xl tracking-wide">ROUIS.</div>
-            <div class="hidden md:flex gap-10 text-xs uppercase tracking-widest text-gray-400 font-medium items-center">
-                <a href="#expertises" class="hover:text-white transition-colors">Expertises</a>
-                <a href="/suivis" class="text-white hover:text-gray-300 transition-colors flex items-center gap-2">
-                    <i class="fa-solid fa-circle text-[8px] animate-pulse"></i> Espace Client
+            <div class="font-display font-bold text-xl tracking-wider">ROUIS.</div>
+            
+            <div class="hidden md:flex gap-8 text-[11px] uppercase tracking-[0.2em] text-gray-400 font-medium items-center">
+                <a href="#vision" class="hover:text-white transition-colors">Vision</a>
+                <a href="#processus" class="hover:text-white transition-colors">Méthode</a>
+                <a href="#expertises" class="hover:text-white transition-colors">Offres</a>
+                <a href="/suivis" class="text-white hover:text-gray-300 transition-colors flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
+                    <i class="fa-solid fa-circle text-[6px] animate-pulse"></i> Espace Client
                 </a>
             </div>
+
+            <button onclick="openContactForm('Je souhaite démarrer un projet avec Rouis Studio.')" class="hidden md:flex bg-white text-black px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wide hover:scale-105 transition-transform items-center gap-2">
+                Démarrer
+            </button>
+            
+            <!-- Menu Mobile Bouton -->
+            <button class="md:hidden text-white text-xl">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
     </nav>
 
-    <!-- Héro -->
-    <section class="min-h-screen flex items-center justify-center px-4 relative pt-20">
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
-        <div class="max-w-5xl mx-auto text-center reveal relative z-10">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-[10px] uppercase tracking-[0.2em] mb-8 text-gray-400">
-                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Studio de développement
+    <!-- Héro Section -->
+    <section class="min-h-screen flex flex-col justify-center px-4 relative pt-20 pb-10">
+        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
+        
+        <div class="max-w-6xl mx-auto text-center reveal relative z-10 w-full">
+            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/10 bg-white/5 text-[10px] uppercase tracking-[0.2em] mb-8 text-gray-400 backdrop-blur-md">
+                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Basé à Paris, France
             </div>
-            <h1 class="font-display text-5xl md:text-7xl lg:text-[90px] font-bold tracking-tighter leading-[1.05] mb-8 text-glow">
-                L'art de la présence numérique.
+            
+            <h1 class="font-display text-5xl md:text-7xl lg:text-[100px] font-bold tracking-tighter leading-[1.05] mb-8 text-glow">
+                Façonnez votre <br> <span class="text-gray-500">empreinte digitale.</span>
             </h1>
+            
             <p class="text-lg text-gray-400 max-w-xl mx-auto mb-12 font-light leading-relaxed">
-                Conception et développement d'interfaces web sur-mesure. Une architecture technique robuste au service d'un design immersif.
+                Studio de création parisien spécialisé dans le développement d'expériences web immersives, ultra-rapides et pensées pour convertir.
             </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-6">
-                <button onclick="openContactForm('Je souhaite démarrer un projet de création de site web.')" class="bg-white text-black px-10 py-4 rounded-full font-medium text-sm hover:scale-105 transition-transform flex items-center justify-center gap-3">
-                    Démarrer un projet <i class="fa-solid fa-arrow-right"></i>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="openContactForm('Je souhaite discuter de mon projet web.')" class="bg-white text-black px-10 py-4 rounded-full font-medium text-sm hover:scale-105 transition-transform flex items-center justify-center gap-3">
+                    Confier mon projet <i class="fa-solid fa-arrow-right"></i>
                 </button>
+                <a href="#expertises" class="px-10 py-4 rounded-full font-medium text-sm border border-white/20 hover:bg-white/10 transition-colors flex items-center justify-center">
+                    Voir les offres
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Expertises -->
-    <section id="expertises" class="py-32 px-4 border-t border-white/5 relative">
+    <!-- Bandeau Défilant (Marquee) -->
+    <div class="w-full overflow-hidden border-y border-white/5 py-4 bg-brand-gray relative flex items-center no-scrollbar">
+        <div class="flex whitespace-nowrap animate-marquee">
+            <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">UI/UX Design</span>
+            <span class="text-white mx-8">•</span>
+            <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">Développement Web</span>
+            <span class="text-white mx-8">•</span>
+            <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">Performances SEO</span>
+            <span class="text-white mx-8">•</span>
+            <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">E-commerce</span>
+            <span class="text-white mx-8">•</span>
+            <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">Identité Visuelle</span>
+            <span class="text-white mx-8">•</span>
+            <!-- Répétition pour l'effet infini -->
+            <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">UI/UX Design</span>
+            <span class="text-white mx-8">•</span>
+            <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">Développement Web</span>
+            <span class="text-white mx-8">•</span>
+            <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">Performances SEO</span>
+            <span class="text-white mx-8">•</span>
+        </div>
+    </div>
+
+    <!-- Section Pourquoi Nous Choisir -->
+    <section id="vision" class="py-32 px-6">
         <div class="max-w-7xl mx-auto w-full reveal">
-            <div class="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
-                <h2 class="font-display text-4xl md:text-6xl font-bold tracking-tighter">Signatures<br>Techniques.</h2>
-                <p class="text-gray-400 max-w-sm text-sm">Une tarification claire pour des solutions digitales complètes, de la direction artistique au déploiement.</p>
+            <div class="text-center mb-20">
+                <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tighter mb-4">L'Excellence comme standard.</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-sm">Nous ne créons pas de simples sites web. Nous concevons des outils de croissance sur-mesure pour propulser votre entreprise.</p>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-6">
-                <!-- Pack 300 -->
-                <div class="glass-panel p-10 hover-lift group cursor-pointer" onclick="openContactForm('Je souhaite réserver le module L\'Essentiel (300€)')">
-                    <div class="flex justify-between items-start mb-16">
-                        <h3 class="font-display text-2xl font-bold">L'Essentiel</h3>
-                        <span class="text-xl font-light text-gray-400">300€</span>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-card p-10 rounded-2xl hover-lift">
+                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-8 border border-white/10">
+                        <i class="fa-solid fa-bolt text-white text-xl"></i>
                     </div>
-                    <ul class="space-y-4 mb-12 text-sm text-gray-400">
+                    <h3 class="font-display text-xl font-bold mb-4">Performances Absolues</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Un code optimisé au millimètre. Des temps de chargement instantanés pour maximiser votre SEO sur Google et retenir l'attention de vos visiteurs.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="glass-card p-10 rounded-2xl hover-lift">
+                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-8 border border-white/10">
+                        <i class="fa-solid fa-pen-nib text-white text-xl"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold mb-4">Design Immersif</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Une direction artistique unique. Nous concevons des interfaces esthétiques et modernes qui reflètent parfaitement l'ADN de votre marque.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="glass-card p-10 rounded-2xl hover-lift">
+                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-8 border border-white/10">
+                        <i class="fa-solid fa-mobile-screen text-white text-xl"></i>
+                    </div>
+                    <h3 class="font-display text-xl font-bold mb-4">Mobile-First</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">Plus de 70% du trafic mondial est sur smartphone. Nos sites sont développés en priorité pour offrir une ergonomie parfaite sur mobile.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Processus -->
+    <section id="processus" class="py-32 px-6 border-t border-white/5 bg-[#080808]">
+        <div class="max-w-7xl mx-auto w-full reveal">
+            <div class="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tighter">Une méthode<br>chirurgicale.</h2>
+                <p class="text-gray-400 max-w-sm text-sm">Un processus clair et transparent. Vous suivez l'avancement en temps réel depuis votre espace client dédié.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Etape 1 -->
+                <div class="relative">
+                    <div class="font-display text-6xl font-bold text-white/5 mb-4 absolute -top-8 -left-4 pointer-events-none">01</div>
+                    <h3 class="font-bold text-lg mb-2 relative z-10">Stratégie & Brief</h3>
+                    <p class="text-sm text-gray-400 relative z-10">Analyse de vos besoins, de votre cible et définition de l'arborescence du site.</p>
+                </div>
+                <!-- Etape 2 -->
+                <div class="relative">
+                    <div class="font-display text-6xl font-bold text-white/5 mb-4 absolute -top-8 -left-4 pointer-events-none">02</div>
+                    <h3 class="font-bold text-lg mb-2 relative z-10">Design UI/UX</h3>
+                    <p class="text-sm text-gray-400 relative z-10">Création des maquettes graphiques haute fidélité pour validation visuelle.</p>
+                </div>
+                <!-- Etape 3 -->
+                <div class="relative">
+                    <div class="font-display text-6xl font-bold text-white/5 mb-4 absolute -top-8 -left-4 pointer-events-none">03</div>
+                    <h3 class="font-bold text-lg mb-2 relative z-10">Développement</h3>
+                    <p class="text-sm text-gray-400 relative z-10">Intégration du code propre, animations et optimisation des performances.</p>
+                </div>
+                <!-- Etape 4 -->
+                <div class="relative">
+                    <div class="font-display text-6xl font-bold text-white/5 mb-4 absolute -top-8 -left-4 pointer-events-none">04</div>
+                    <h3 class="font-bold text-lg mb-2 relative z-10">Lancement</h3>
+                    <p class="text-sm text-gray-400 relative z-10">Tests finaux, mise en ligne sur votre domaine et remise des accès complets.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expertises / Tarifs -->
+    <section id="expertises" class="py-32 px-6 border-t border-white/5 relative">
+        <div class="max-w-7xl mx-auto w-full reveal">
+            <div class="text-center mb-20">
+                <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tighter mb-4">Signatures Techniques.</h2>
+                <p class="text-gray-400 max-w-sm mx-auto text-sm">Une tarification transparente pour des solutions haut de gamme.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Pack 300 -->
+                <div class="glass-panel p-10 hover-lift group cursor-pointer rounded-3xl flex flex-col" onclick="openContactForm('Je souhaite réserver le module L\'Essentiel (300€)')">
+                    <div class="flex justify-between items-start mb-12">
+                        <h3 class="font-display text-2xl font-bold">L'Essentiel</h3>
+                        <span class="text-2xl font-light text-gray-400">300€</span>
+                    </div>
+                    <ul class="space-y-4 mb-12 text-sm text-gray-400 flex-1">
                         <li class="flex gap-4"><span class="text-white">—</span> Interface vitrine sur-mesure (3-5 pages)</li>
                         <li class="flex gap-4"><span class="text-white">—</span> Architecture Responsive & Mobile-First</li>
-                        <li class="flex gap-4"><span class="text-white">—</span> Optimisation des performances front-end</li>
+                        <li class="flex gap-4"><span class="text-white">—</span> Formulaire de contact sécurisé</li>
+                        <li class="flex gap-4"><span class="text-white">—</span> Optimisation SEO technique de base</li>
                     </ul>
-                    <div class="text-xs uppercase tracking-widest font-bold group-hover:text-gray-300 transition-colors">Réserver ce module <i class="fa-solid fa-arrow-right ml-2"></i></div>
+                    <div class="text-xs uppercase tracking-[0.2em] font-bold group-hover:text-gray-300 transition-colors border-t border-white/10 pt-6">Réserver ce module <i class="fa-solid fa-arrow-right ml-2"></i></div>
                 </div>
 
                 <!-- Pack 700 -->
-                <div class="glass-panel p-10 hover-lift group cursor-pointer bg-white/5" onclick="openContactForm('Je souhaite réserver le module Pro Business (700€)')">
-                    <div class="flex justify-between items-start mb-16">
+                <div class="glass-panel p-10 hover-lift group cursor-pointer rounded-3xl bg-white/5 flex flex-col relative overflow-hidden" onclick="openContactForm('Je souhaite réserver le module Pro Business (700€)')">
+                    <!-- Badge -->
+                    <div class="absolute top-8 right-8 bg-white text-black text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full">Recommandé</div>
+                    
+                    <div class="flex justify-between items-start mb-12">
                         <h3 class="font-display text-2xl font-bold">Pro Business</h3>
-                        <span class="text-xl font-light text-white">700€</span>
+                        <span class="text-2xl font-bold text-white mt-8">700€</span>
                     </div>
-                    <ul class="space-y-4 mb-12 text-sm text-gray-400">
+                    <ul class="space-y-4 mb-12 text-sm text-gray-300 flex-1">
                         <li class="flex gap-4"><span class="text-white">—</span> Tout ce qui est inclus dans L'Essentiel</li>
                         <li class="flex gap-4"><span class="text-white">—</span> Architecture dynamique (jusqu'à 10 pages)</li>
-                        <li class="flex gap-4"><span class="text-white">—</span> Espace d'administration personnalisé</li>
+                        <li class="flex gap-4"><span class="text-white">—</span> Espace d'administration / CMS (Blog, Portfolio)</li>
                         <li class="flex gap-4"><span class="text-white">—</span> Animations fluides & Design d'interaction</li>
+                        <li class="flex gap-4"><span class="text-white">—</span> Intégration outils tiers (Stripe, Maps...)</li>
                     </ul>
-                    <div class="text-xs uppercase tracking-widest font-bold text-white group-hover:text-gray-300 transition-colors">Réserver ce module <i class="fa-solid fa-arrow-right ml-2"></i></div>
+                    <div class="text-xs uppercase tracking-[0.2em] font-bold text-white group-hover:text-gray-300 transition-colors border-t border-white/10 pt-6">Réserver ce module <i class="fa-solid fa-arrow-right ml-2"></i></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="border-t border-white/5 py-12 px-8">
-        <div class="max-w-7xl mx-auto flex justify-between items-center text-xs font-medium text-gray-500 uppercase tracking-widest">
-            <span>© 2026 Rouis</span>
-            <span>Tunis, TN</span>
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-[#030303] pt-20 pb-10 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-20">
+            <div>
+                <h2 class="font-display text-3xl font-bold tracking-wider mb-2">ROUIS.</h2>
+                <p class="text-gray-500 text-sm max-w-xs">Le studio digital partenaire de votre croissance en ligne.</p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-10 md:gap-20">
+                <div>
+                    <h4 class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-4">Localisation</h4>
+                    <p class="text-sm text-gray-300">Paris, France<br>Disponible à l'international</p>
+                </div>
+                <div>
+                    <h4 class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-4">Contact</h4>
+                    <p class="text-sm text-gray-300"><a href="https://wa.me/21695213460" class="hover:text-white transition-colors">+216 95 213 460</a><br><a href="mailto:contact@rouis.studio" class="hover:text-white transition-colors">contact@rouis.studio</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto border-t border-white/5 pt-8 flex justify-between items-center text-[10px] font-medium text-gray-600 uppercase tracking-widest">
+            <span>© 2026 Rouis Studio</span>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-white transition-colors">Mentions Légales</a>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Logique d'affichage des éléments au scroll
+        // Animations d'apparition au scroll
         document.addEventListener("DOMContentLoaded", () => {
             const reveals = document.querySelectorAll(".reveal");
             const observer = new IntersectionObserver((entries) => {
@@ -167,7 +324,6 @@
         function openContactForm(message) {
             currentPackMessage = message;
             modal.classList.remove('hidden');
-            // Petit délai pour l'animation d'apparition
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
                 modalContent.classList.remove('scale-95');
@@ -182,6 +338,11 @@
             }, 300);
         }
 
+        // Fermer la modale si on clique en dehors
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) closeContactForm();
+        });
+
         document.getElementById('lead-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const nom = document.getElementById('lf-nom').value;
@@ -189,13 +350,13 @@
             const entreprise = document.getElementById('lf-entreprise').value;
             const secteur = document.getElementById('lf-secteur').value;
 
-            // Construction du message WhatsApp
+            // Construction propre du message WhatsApp
             const finalMessage = `${currentPackMessage}\n\n*📌 Informations Client :*\n- *Nom :* ${nom}\n- *Email :* ${email}\n- *Entreprise :* ${entreprise}\n- *Secteur :* ${secteur}`;
 
-            const numero = "21695213460";
+            const numero = "21695213460"; // Ton numéro de téléphone WhatsApp
             window.open(`https://wa.me/${numero}?text=${encodeURIComponent(finalMessage)}`, "_blank");
             closeContactForm();
-            e.target.reset(); // Vide le formulaire
+            e.target.reset();
         });
     </script>
 </body>
