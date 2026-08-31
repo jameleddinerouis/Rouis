@@ -49,14 +49,18 @@
         <div class="glow-orb-2"></div>
     </div>
 
-    <!-- Navigation -->
+    <!-- Navigation Modifiée avec le bouton Espace Client -->
     <nav class="fixed top-0 w-full z-50 glass-card px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="font-display font-bold text-2xl">ROUIS<span class="text-blue-500">.</span></div>
-            <div class="hidden md:flex gap-8 text-sm text-gray-400">
-                <a href="#offres" class="hover:text-white transition-colors">Offres</a>
-                <a href="#modules" class="hover:text-white transition-colors">Modules</a>
+            
+            <div class="hidden md:flex gap-8 text-sm font-medium items-center">
+                <a href="#offres" class="text-gray-400 hover:text-white transition-colors">Offres</a>
+                <a href="/suivis" class="text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-user-lock"></i> Espace Client
+                </a>
             </div>
+
             <button onclick="contactWhatsApp()" class="bg-white text-black px-5 py-2.5 rounded-full text-sm font-bold hover:scale-105 transition-transform flex items-center gap-2">
                 <i class="fa-brands fa-whatsapp text-lg"></i> Démarrer
             </button>
@@ -69,7 +73,7 @@
             <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6">Des sites web qui <br> <span class="text-gradient">marquent les esprits.</span></h1>
             <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">Je conçois des expériences digitales sur-mesure, ultra-rapides et pensées pour convertir.</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <button onclick="contactWhatsApp('Je souhaite discuter de mon projet de site web')" class="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all">
+                <button onclick='contactWhatsApp("Je souhaite discuter de mon projet de site web")' class="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:shadow-[0_0_40px_rgba(139,92,246,0.5)]">
                     Réserver une consultation
                 </button>
                 <a href="#offres" class="px-8 py-4 rounded-full font-bold text-lg border border-white/20 hover:bg-white/5 transition-colors">Découvrir les offres</a>
@@ -93,7 +97,7 @@
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-500"></i> 100% Responsive</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-500"></i> Formulaire de contact</li>
                     </ul>
-                    <button onclick="contactWhatsApp('Je suis interesse par le pack Essentiel a 300 euros')" class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 font-semibold border border-white/10 transition-colors">Sélectionner ce pack</button>
+                    <button onclick='contactWhatsApp("Je suis interesse par le pack Essentiel a 300 euros")' class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 font-semibold border border-white/10 transition-colors">Sélectionner ce pack</button>
                 </div>
                 <!-- Pack 700 -->
                 <div class="glass-card rounded-3xl p-8 md:p-10 border-blue-500/30">
@@ -104,7 +108,7 @@
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-violet-400"></i> Jusqu'à 10 pages dynamiques</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-violet-400"></i> Espace Gestion de contenu</li>
                     </ul>
-                    <button onclick="contactWhatsApp('Je suis interesse par le pack Pro Business a 700 euros')" class="w-full py-3 rounded-xl bg-white text-black hover:bg-gray-200 font-bold transition-colors">Sélectionner ce pack</button>
+                    <button onclick='contactWhatsApp("Je suis interesse par le pack Pro Business a 700 euros")' class="w-full py-3 rounded-xl bg-white text-black hover:bg-gray-200 font-bold transition-colors">Sélectionner ce pack</button>
                 </div>
             </div>
         </div>
