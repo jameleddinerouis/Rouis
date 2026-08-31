@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROUIS | Création de Sites Web d'Exception</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Syne"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#030303',
+                            gray: '#121212',
+                            light: '#f5f5f7',
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #030303;
+            color: #f5f5f7;
+            overflow-x: hidden;
+        }
+
+        /* Effet Glassmorphism Premium */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Texte Gradient */
+        .text-gradient {
+            background: linear-gradient(135deg, #fff 0%, #a5a5a5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .text-gradient-accent {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Animations d'entrée (Scroll Reveal) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Auras de fond lumineuses */
+        .glow-orb-1 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -200px;
+            left: -200px;
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .glow-orb-2 {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, rgba(0,0,0,0) 70%);
+            bottom: -300px;
+            right: -200px;
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Auras Globales -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="glow-orb-1"></div>
+        <div class="glow-orb-2"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-card border-x-0 border-t-0 border-b border-white/5 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="font-display font-bold text-2xl tracking-tighter">ROUIS<span class="text-blue-500">.</span></div>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+                <a href="#offres" class="hover:text-white transition-colors">Offres</a>
+                <a href="#modules" class="hover:text-white transition-colors">Modules</a>
+                <a href="#process" class="hover:text-white transition-colors">Processus</a>
+            </div>
+            <button onclick="contactWhatsApp()" class="bg-white text-black px-5 py-2.5 rounded-full text-sm font-bold hover:scale-105 transition-transform flex items-center gap-2">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Démarrer
+            </button>
+        </div>
+    </nav>
+
+    <!-- SLIDE 1 : HERO SECTION -->
+    <section class="min-h-screen flex items-center justify-center pt-20 px-4 relative">
+        <div class="max-w-5xl mx-auto text-center reveal">
+            <div class="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs font-medium tracking-widest uppercase mb-8 text-gray-300">
+                Studio Digital Haut de Gamme
+            </div>
+            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.1] mb-6">
+                Des sites web qui <br> <span class="text-gradient">marquent les esprits.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+                Je conçois des expériences digitales sur-mesure, ultra-rapides et pensées pour convertir. Propulsez votre entreprise dans une nouvelle dimension.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="contactWhatsApp('Je souhaite discuter de la création d\\'un site web')" class="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:shadow-[0_0_40px_rgba(139,92,246,0.5)]">
+                    Réserver une consultation
+                </button>
+                <a href="#offres" class="px-8 py-4 rounded-full font-bold text-lg border border-white/20 hover:bg-white/5 transition-colors">
+                    Découvrir les offres
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 2 : OFFRES & PRICING -->
+    <section id="offres" class="min-h-screen flex items-center py-24 px-4 relative border-t border-white/5">
+        <div class="max-w-7xl mx-auto w-full reveal">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">Des fondations <span class="text-gradient-accent">solides</span>.</h2>
+                <p class="text-gray-400">Une tarification transparente pour des résultats exceptionnels.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Pack Standard -->
+                <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all"></div>
+                    <h3 class="font-display text-2xl font-bold mb-2">L'Essentiel</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-bold">300€</span>
+                        <span class="text-gray-400 text-sm">/ site vitrine</span>
+                    </div>
+                    <p class="text-gray-400 mb-8 text-sm leading-relaxed">Parfait pour les artisans, freelances et petites entreprises souhaitant une présence en ligne élégante et professionnelle.</p>
+                    <ul class="space-y-4 mb-10 flex-grow">
+                        <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-check text-blue-500"></i> Design sur-mesure (3 à 5 pages)</li>
+                        <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-check text-blue-500"></i> 100% Responsive (Mobile & Tablette)</li>
+                        <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-check text-blue-500"></i> Formulaire de contact sécurisé</li>
+                        <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-check text-blue-500"></i> Optimisation vitesse & SEO de base</li>
+                    </ul>
+                    <button onclick="contactWhatsApp('Je suis intéressé par le pack L\\'Essentiel à 300€')" class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 font-semibold transition-colors border border-white/10">Sélectionner ce pack</button>
+                </div>
+
+                <!-- Pack Business -->
+                <div class="glass-card rounded-3xl p-8 md:p-10 flex flex-col relative overflow-hidden border-blue-500/30">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-violet-500/20 rounded-full blur-3xl"></div>
+                    <div class="absolute -top-3 -right-3 bg-gradient-to-r from-blue-600 to-violet-600 text-xs font-bold px-6 py-4 rotate-45">POPULAIRE</div>
+                    
+                    <h3 class="font-display text-2xl font-bold mb-2">Pro Business</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-bold">700€</span>
+                        <span class="text-gray-400 text-sm">/ site premium</span>
+                    </div>
+                    <p class="text-gray-400 mb-8 text-sm leading-relaxed">Conçu pour les entreprises en croissance. Design immersif, animations avancées et structure pensée pour la conversion.</p>
+                    <ul class="space-y-4 mb-10 flex-grow">
+                        <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-check text-violet-400"></i> Tout ce qui est dans L'Essentiel</li>
+                        <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-check text-violet-400"></i> Jusqu'à 10 pages dynamiques</li>
+                        <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-check text-violet-400"></i> Animations fluides & Design immersif</li>
+                        <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-check text-violet-400"></i> Espace Blog ou Gestion de contenu (CMS)</li>
+                    </ul>
+                    <button onclick="contactWhatsApp('Je suis intéressé par le pack Pro Business à 700€')" class="w-full py-3 rounded-xl bg-white text-black hover:bg-gray-200 font-bold transition-colors">Sélectionner ce pack</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 3 : OPTIONS & MODULES -->
+    <section id="modules" class="min-h-screen flex items-center py-24 px-4 relative border-t border-white/5 bg-brand-gray/30">
+        <div class="max-w-7xl mx-auto w-full reveal">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">L'Art du <span class="text-gradient">détail</span>.</h2>
+                <p class="text-gray-400">Des modules premium à la carte pour créer l'outil parfait.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Option 1 -->
+                <div class="glass-card p-6 rounded-2xl group cursor-default">
+                    <div class="w-12 h-12 bg-indigo-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-stripe-s text-indigo-400 text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Paiement Stripe / E-commerce</h3>
+                    <p class="text-sm text-gray-400">Intégration d'un système de paiement sécurisé pour vendre vos services ou produits directement en ligne.</p>
+                </div>
+
+                <!-- Option 2 -->
+                <div class="glass-card p-6 rounded-2xl group cursor-default">
+                    <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-whatsapp text-green-400 text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Bouton Live WhatsApp</h3>
+                    <p class="text-sm text-gray-400">Un widget flottant permettant à vos visiteurs de vous contacter instantanément sur votre téléphone.</p>
+                </div>
+
+                <!-- Option 3 -->
+                <div class="glass-card p-6 rounded-2xl group cursor-default">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-map-location-dot text-blue-400 text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Carte Interactive (Maps)</h3>
+                    <p class="text-sm text-gray-400">Intégration élégante de Google Maps avec design personnalisé pour coller à l'esthétique de votre site.</p>
+                </div>
+
+                <!-- Option 4 -->
+                <div class="glass-card p-6 rounded-2xl group cursor-default">
+                    <div class="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-magnifying-glass-chart text-yellow-400 text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">SEO Avancé & Analytics</h3>
+                    <p class="text-sm text-gray-400">Optimisation poussée pour Google, balisage structuré et tableau de bord de statistiques des visiteurs.</p>
+                </div>
+
+                <!-- Option 5 -->
+                <div class="glass-card p-6 rounded-2xl group cursor-default">
+                    <div class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-earth-americas text-pink-400 text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Site Multilingue</h3>
+                    <p class="text-sm text-gray-400">Touchez une audience internationale avec un système de traduction fluide (Français, Anglais, Arabe, etc.).</p>
+                </div>
+
+                <!-- Option 6 -->
+                <div class="glass-card p-6 rounded-2xl group cursor-default">
+                    <div class="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Animations 3D / WebGL</h3>
+                    <p class="text-sm text-gray-400">Rendez votre site unique avec des animations complexes, des éléments 3D ou des effets au scroll haut de gamme.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 4 : PROCESSUS -->
+    <section id="process" class="min-h-screen flex items-center py-24 px-4 relative border-t border-white/5">
+        <div class="max-w-7xl mx-auto w-full reveal">
+            <div class="text-center mb-20">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">Une exécution <span class="text-gradient">chirurgicale</span>.</h2>
+                <p class="text-gray-400">Mon processus de création, pensé pour votre tranquillité d'esprit.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+                <!-- Ligne de connexion (Desktop) -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-[1px] bg-white/10 -translate-y-1/2 z-0"></div>
+
+                <div class="relative z-10 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-full bg-black border border-white/20 flex items-center justify-center font-display font-bold text-2xl text-blue-400 mb-6 shadow-[0_0_20px_rgba(59,130,246,0.2)]">1</div>
+                    <h3 class="font-bold text-xl mb-2">Stratégie</h3>
+                    <p class="text-sm text-gray-400">Échange sur vos objectifs, votre cible et l'identité visuelle de votre marque.</p>
+                </div>
+
+                <div class="relative z-10 flex flex-col items-center text-center mt-8 md:mt-0">
+                    <div class="w-16 h-16 rounded-full bg-black border border-white/20 flex items-center justify-center font-display font-bold text-2xl text-blue-400 mb-6">2</div>
+                    <h3 class="font-bold text-xl mb-2">Design UI/UX</h3>
+                    <p class="text-sm text-gray-400">Création des maquettes graphiques sur-mesure. Rien n'est codé sans votre validation.</p>
+                </div>
+
+                <div class="relative z-10 flex flex-col items-center text-center mt-8 md:mt-0">
+                    <div class="w-16 h-16 rounded-full bg-black border border-white/20 flex items-center justify-center font-display font-bold text-2xl text-blue-400 mb-6">3</div>
+                    <h3 class="font-bold text-xl mb-2">Développement</h3>
+                    <p class="text-sm text-gray-400">Codage propre, intégration des animations et optimisation extrême des performances.</p>
+                </div>
+
+                <div class="relative z-10 flex flex-col items-center text-center mt-8 md:mt-0">
+                    <div class="w-16 h-16 rounded-full bg-black border border-white/20 flex items-center justify-center font-display font-bold text-2xl text-blue-400 mb-6 shadow-[0_0_20px_rgba(59,130,246,0.2)]">4</div>
+                    <h3 class="font-bold text-xl mb-2">Lancement</h3>
+                    <p class="text-sm text-gray-400">Mise en ligne, tests de sécurité et remise des clés de votre nouvelle plateforme.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 5 : CALL TO ACTION / CONTACT -->
+    <section class="min-h-[80vh] flex items-center py-24 px-4 relative border-t border-white/5 overflow-hidden">
+        <!-- Aura intense pour le final -->
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-blue-900/20 z-0 pointer-events-none"></div>
+        
+        <div class="max-w-4xl mx-auto w-full text-center relative z-10 reveal glass-card rounded-[40px] p-10 md:p-20 border-white/10">
+            <h2 class="font-display text-5xl md:text-7xl font-bold tracking-tighter mb-6">Prêt à marquer la <span class="text-gradient">différence</span> ?</h2>
+            <p class="text-xl text-gray-400 mb-12 font-light">
+                Discutons de votre projet dès aujourd'hui. Devis gratuit et réponse immédiate.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="contactWhatsApp('Bonjour Rouis, j\\'aimerais avoir un devis pour un projet web.')" class="bg-green-500 hover:bg-green-400 text-black px-8 py-4 rounded-full font-bold text-lg transition-all shadow-[0_0_30px_rgba(34,197,94,0.3)] hover:shadow-[0_0_40px_rgba(34,197,94,0.5)] flex items-center justify-center gap-3">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i> Discuter sur WhatsApp
+                </button>
+            </div>
+            
+            <p class="mt-8 text-sm text-gray-500 flex items-center justify-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                Disponible actuellement pour de nouveaux projets
+            </p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 bg-black py-10 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+            <div class="font-display font-bold text-xl text-white tracking-tighter">ROUIS.</div>
+            <p>© 2026 Rouis Digital Studio. Tous droits réservés.</p>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-linkedin text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // Fonctionnalité WhatsApp
+        function contactWhatsApp(customMessage = "Bonjour Rouis, je souhaite créer un site web d'exception !") {
+            const numero = "21695213460"; 
+            const message = encodeURIComponent(customMessage);
+            window.open(`https://wa.me/${numero}?text=${message}`, "_blank");
+        }
+
+        // Animation de scroll au chargement des éléments (Intersection Observer)
+        document.addEventListener("DOMContentLoaded", () => {
+            const reveals = document.querySelectorAll(".reveal");
+
+            const revealOnScroll = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                        observer.unobserve(entry.target); // Ne s'anime qu'une fois
+                    }
+                });
+            }, {
+                root: null,
+                threshold: 0.15, // Se déclenche quand 15% de l'élément est visible
+                rootMargin: "0px 0px -50px 0px"
+            });
+
+            reveals.forEach(reveal => {
+                revealOnScroll.observe(reveal);
+            });
+        });
+    </script>
+</body>
+</html>
