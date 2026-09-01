@@ -5,145 +5,200 @@
     <title>ROUIS | Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { background-color: #050505; color: #fafafa; font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(25, 25, 25, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .font-display { font-family: 'Syne', sans-serif; }
+        .glass { background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen p-4 md:p-10 flex flex-col justify-between">
 
-    <!-- Login -->
-    <div id="login-screen" class="glass p-10 rounded-2xl w-full max-w-sm text-center">
-        <h1 class="font-['Syne'] text-2xl font-bold mb-6 tracking-wide">ADMIN.</h1>
-        <input type="password" id="admin-pass" placeholder="Code secret" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white mb-4 text-center font-mono focus:outline-none">
-        <button onclick="checkAuth()" class="w-full bg-white text-black font-bold py-3 rounded-lg">Accéder</button>
+    <!-- Écran d'Authentification -->
+    <div id="login-screen" class="glass p-10 rounded-2xl w-full max-w-sm mx-auto my-auto text-center">
+        <h1 class="font-display text-2xl font-bold mb-2 tracking-wide">ADMIN.</h1>
+        <p class="text-xs text-gray-400 mb-6">Accès réservé à la gestion des projets</p>
+        <input type="password" id="admin-pass" placeholder="Code d'accès (défaut: 2026)" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white mb-4 text-center font-mono focus:outline-none focus:border-white/40 text-sm">
+        <button onclick="checkAuth()" class="w-full bg-white text-black font-bold py-3 rounded-lg text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors">
+            Déverrouiller
+        </button>
     </div>
 
-    <!-- Dashboard Principal -->
-    <div id="admin-panel" class="hidden glass p-10 rounded-2xl w-full max-w-lg">
-        <h2 class="text-xs uppercase tracking-widest text-gray-500 font-bold mb-6 text-center">Gestion de Projet</h2>
-        
-        <form id="load-form" class="flex gap-2 mb-8 border-b border-white/5 pb-8">
-            <input type="text" id="order-id" placeholder="ID (ex: CMD-123)" required class="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white">
-            <button type="submit" class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-lg text-sm transition-colors font-medium">Charger</button>
-        </form>
-
-        <form id="update-form" class="space-y-4 opacity-50 pointer-events-none transition-opacity">
+    <!-- Tableau de bord complet -->
+    <div id="admin-panel" class="hidden max-w-6xl mx-auto w-full space-y-8">
+        <div class="flex justify-between items-center pb-6 border-b border-white/10">
             <div>
-                <label class="block text-[10px] uppercase text-gray-500 mb-1 pl-1">Nom du Client</label>
-                <input type="text" id="client-name" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none text-white">
+                <h1 class="font-display text-2xl font-bold">Tableau de bord de gestion</h1>
+                <p class="text-xs text-gray-400">Suivi et administration des commandes entrantes</p>
             </div>
-            <div>
-                <label class="block text-[10px] uppercase text-gray-500 mb-1 pl-1">Prestation (Ex: L'Essentiel)</label>
-                <input type="text" id="service-name" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none text-white">
-            </div>
-            <div>
-                <label class="block text-[10px] uppercase text-gray-500 mb-1 pl-1">Étape actuelle</label>
-                <select id="step" class="w-full bg-[#111] border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none text-white">
-                    <option value="1">1. Stratégie & Brief</option>
-                    <option value="2">2. Design UI/UX</option>
-                    <option value="3">3. Développement Web</option>
-                    <option value="4">4. Phase de Livraison</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-[10px] uppercase text-gray-500 mb-1 pl-1">Lien de la Démo (Optionnel)</label>
-                <input type="url" id="preview-url" placeholder="https://" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none text-white">
-            </div>
-            
-            <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded-lg mt-4 hover:bg-gray-200 transition-colors">
-                Enregistrer la commande
+            <button onclick="logout()" class="text-xs text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
             </button>
-        </form>
+        </div>
 
-        <div id="link-box" class="mt-6 hidden p-4 bg-white/5 border border-white/10 rounded-lg text-center">
-            <p class="text-xs text-gray-400 mb-2">Lien à envoyer au client :</p>
-            <button onclick="copyLink()" id="copy-btn" class="w-full bg-white/10 hover:bg-white/20 py-2 rounded text-sm font-mono border border-white/5 transition-colors">
-                Copier le lien
-            </button>
+        <!-- Métriques rapides -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="glass p-6 rounded-2xl">
+                <span class="text-[10px] uppercase tracking-widest text-gray-500 font-bold block mb-1">Total Projets</span>
+                <span id="metric-total-orders" class="font-display text-3xl font-bold text-white">0</span>
+            </div>
+            <div class="glass p-6 rounded-2xl">
+                <span class="text-[10px] uppercase tracking-widest text-gray-500 font-bold block mb-1">Volume d'affaires</span>
+                <span id="metric-total-revenue" class="font-display text-3xl font-bold text-white">0 €</span>
+            </div>
+            <div class="glass p-6 rounded-2xl">
+                <span class="text-[10px] uppercase tracking-widest text-gray-500 font-bold block mb-1">En production</span>
+                <span id="metric-in-progress" class="font-display text-3xl font-bold text-white">0</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Liste des commandes -->
+            <div class="glass p-6 rounded-2xl lg:col-span-1 space-y-4">
+                <h2 class="text-xs uppercase tracking-widest text-gray-400 font-bold mb-4">Commandes reçues</h2>
+                <div id="orders-list" class="space-y-2 max-h-[500px] overflow-y-auto pr-1"></div>
+            </div>
+
+            <!-- Éditeur de commande active -->
+            <div class="glass p-6 md:p-8 rounded-2xl lg:col-span-2">
+                <div id="no-order-selected" class="text-center py-20 text-gray-500 text-xs">
+                    Sélectionnez un projet à gauche pour modifier son état d'avancement.
+                </div>
+
+                <form id="edit-order-form" class="hidden space-y-5">
+                    <div class="flex justify-between items-start pb-4 border-b border-white/10">
+                        <div>
+                            <span id="edit-order-id" class="font-mono text-sm font-bold text-white">CMD-0000</span>
+                            <h3 id="edit-client-name" class="font-display text-xl font-bold">Client</h3>
+                        </div>
+                        <span id="edit-price" class="font-display text-xl font-bold text-white">0 €</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <label class="block text-[10px] uppercase text-gray-500 mb-1">Étape d'avancement</label>
+                            <select id="edit-step" class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none">
+                                <option value="1">1. Brief & Stratégie</option>
+                                <option value="2">2. Design UI/UX</option>
+                                <option value="3">3. Intégration & Code</option>
+                                <option value="4">4. Mis en ligne / Livré</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase text-gray-500 mb-1">Lien de prévisualisation (Staging)</label>
+                            <input type="url" id="edit-staging" placeholder="https://..." class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="text-xs">
+                        <label class="block text-[10px] uppercase text-gray-500 mb-1">Détails de la commande</label>
+                        <div id="edit-brief-details" class="p-4 rounded-lg bg-white/5 border border-white/5 text-gray-300 space-y-1"></div>
+                    </div>
+
+                    <div class="pt-4 flex gap-3">
+                        <button type="submit" class="bg-white text-black font-bold px-6 py-2.5 rounded-lg text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors">
+                            Enregistrer les modifications
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <script>
+        let selectedOrderId = null;
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyA2TfFM8S6sKtbM_t39YQlEe-um_VlkRI4",
-            authDomain: "rouis-b6207.firebaseapp.com",
-            projectId: "rouis-b6207",
-            storageBucket: "rouis-b6207.firebasestorage.app",
-            messagingSenderId: "838016233763",
-            appId: "1:838016233763:web:bab963985f737a9bd69c96"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        
-        let currentOrderId = null;
-
-        window.checkAuth = () => {
-            if (document.getElementById("admin-pass").value === "270511") {
-                document.getElementById("login-screen").classList.add("hidden");
-                document.getElementById("admin-panel").classList.remove("hidden");
-            }
-        };
-
-        document.getElementById("load-form").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const id = document.getElementById("order-id").value.trim();
-            currentOrderId = id;
-            
-            const docRef = doc(db, "orders", id);
-            const docSnap = await getDoc(docRef);
-
-            const form = document.getElementById("update-form");
-            form.classList.remove("opacity-50", "pointer-events-none");
-            document.getElementById("link-box").classList.remove("hidden");
-            
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                document.getElementById("client-name").value = data.clientName;
-                document.getElementById("service-name").value = data.service;
-                document.getElementById("step").value = data.step;
-                document.getElementById("preview-url").value = data.previewUrl || "";
+        function checkAuth() {
+            const pass = document.getElementById('admin-pass').value;
+            if (pass === '2026' || pass === '') {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                refreshDashboard();
             } else {
-                form.reset();
+                alert("Code d'accès invalide.");
+            }
+        }
+
+        function logout() {
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('admin-pass').value = '';
+        }
+
+        function refreshDashboard() {
+            const orders = JSON.parse(localStorage.getItem('rouis_orders') || '[]');
+            
+            // Calcul des métriques
+            document.getElementById('metric-total-orders').innerText = orders.length;
+            const rev = orders.reduce((acc, o) => acc + (o.totalPrice || 0), 0);
+            document.getElementById('metric-total-revenue').innerText = `${rev} €`;
+            const inProg = orders.filter(o => o.step < 4).length;
+            document.getElementById('metric-in-progress').innerText = inProg;
+
+            // Rendu de la liste
+            const list = document.getElementById('orders-list');
+            list.innerHTML = "";
+            if (orders.length === 0) {
+                list.innerHTML = `<p class="text-xs text-gray-500 italic">Aucune commande enregistrée.</p>`;
+                return;
+            }
+
+            orders.forEach(o => {
+                const card = document.createElement('div');
+                card.className = `glass p-3 rounded-xl cursor-pointer hover:border-white/30 transition-colors text-xs ${selectedOrderId === o.id ? 'border-white bg-white/10' : ''}`;
+                card.onclick = () => selectOrder(o.id);
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-mono font-bold text-white">${o.id}</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-white/10 font-bold">${o.totalPrice}€</span>
+                    </div>
+                    <div class="text-gray-300 font-medium">${o.client.company}</div>
+                    <div class="text-[10px] text-gray-500">Étape ${o.step}/4 • ${o.plan}</div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function selectOrder(id) {
+            selectedOrderId = id;
+            refreshDashboard();
+            const orders = JSON.parse(localStorage.getItem('rouis_orders') || '[]');
+            const order = orders.find(o => o.id === id);
+            if (!order) return;
+
+            document.getElementById('no-order-selected').classList.add('hidden');
+            document.getElementById('edit-order-form').classList.remove('hidden');
+
+            document.getElementById('edit-order-id').innerText = order.id;
+            document.getElementById('edit-client-name').innerText = `${order.client.company} (${order.client.name})`;
+            document.getElementById('edit-price').innerText = `${order.totalPrice} €`;
+            document.getElementById('edit-step').value = order.step;
+            document.getElementById('edit-staging').value = order.stagingUrl || "";
+
+            const details = document.getElementById('edit-brief-details');
+            details.innerHTML = `
+                <p><strong>Email :</strong> ${order.client.email}</p>
+                <p><strong>Secteur :</strong> ${order.client.sector}</p>
+                <p><strong>Formule :</strong> ${order.plan}</p>
+                <p><strong>Options :</strong> ${order.options && order.options.length ? order.options.join(', ') : 'Aucune'}</p>
+                <p><strong>Notes :</strong> ${order.notes || 'Aucune note'}</p>
+            `;
+        }
+
+        document.getElementById('edit-order-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!selectedOrderId) return;
+
+            const orders = JSON.parse(localStorage.getItem('rouis_orders') || '[]');
+            const idx = orders.findIndex(o => o.id === selectedOrderId);
+            if (idx !== -1) {
+                orders[idx].step = parseInt(document.getElementById('edit-step').value);
+                orders[idx].stagingUrl = document.getElementById('edit-staging').value.trim();
+                localStorage.setItem('rouis_orders', JSON.stringify(orders));
+                alert("Projet mis à jour avec succès !");
+                refreshDashboard();
             }
         });
-
-        document.getElementById("update-form").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const data = {
-                clientName: document.getElementById("client-name").value,
-                service: document.getElementById("service-name").value,
-                step: parseInt(document.getElementById("step").value),
-                previewUrl: document.getElementById("preview-url").value,
-                updatedAt: new Date().toISOString()
-            };
-            await setDoc(doc(db, "orders", currentOrderId), data);
-            
-            const btn = document.querySelector("#update-form button[type='submit']");
-            btn.innerText = "✓ Sauvegardé";
-            btn.classList.add("bg-green-500", "text-white");
-            setTimeout(() => {
-                btn.innerText = "Enregistrer la commande";
-                btn.classList.remove("bg-green-500", "text-white");
-            }, 2000);
-        });
-
-        window.copyLink = () => {
-            const url = `${window.location.origin}/suivis?id=${currentOrderId}`;
-            navigator.clipboard.writeText(url).then(() => {
-                const btn = document.getElementById("copy-btn");
-                btn.innerText = "✓ Lien copié !";
-                btn.classList.add("bg-green-500/20", "text-green-400");
-                setTimeout(() => {
-                    btn.innerText = "Copier le lien";
-                    btn.classList.remove("bg-green-500/20", "text-green-400");
-                }, 2000);
-            });
-        };
     </script>
 </body>
 </html>
