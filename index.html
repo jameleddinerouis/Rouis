@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROUIS | Studio Digital & Créatif - Paris</title>
+    <title>ROUIS | Studio Digital & Créatif</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <script>
@@ -14,9 +14,7 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Syne', 'sans-serif'] },
                     colors: { brand: { dark: '#030303', gray: '#0a0a0a', light: '#fafafa' } },
-                    animation: {
-                        'marquee': 'marquee 25s linear infinite',
-                    },
+                    animation: { 'marquee': 'marquee 25s linear infinite' },
                     keyframes: {
                         marquee: {
                             '0%': { transform: 'translateX(0%)' },
@@ -29,17 +27,14 @@
     </script>
     <style>
         body { background-color: #030303; color: #fafafa; overflow-x: hidden; }
-        /* Grain premium */
         .noise-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; opacity: 0.035; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
-        .glass-panel { background: rgba(20, 20, 20, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-panel { background: rgba(20, 20, 20, 0.55); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.07); }
         .glass-card { background: linear-gradient(180deg, rgba(30,30,30,0.4) 0%, rgba(15,15,15,0.4) 100%); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .text-glow { text-shadow: 0 0 40px rgba(255,255,255,0.2); }
-        .hover-lift { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease; }
-        .hover-lift:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.2); }
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .text-glow { text-shadow: 0 0 40px rgba(255,255,255,0.25); }
+        .hover-lift { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease; }
+        .hover-lift:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.25); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        /* Cacher la scrollbar du marquee */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -47,95 +42,170 @@
 <body class="antialiased selection:bg-white selection:text-black relative">
     <div class="noise-overlay"></div>
 
-    <!-- Modale de Contact -->
-    <div id="contact-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 p-4">
-        <div class="glass-panel p-8 md:p-10 rounded-2xl w-full max-w-lg relative transform scale-95 transition-transform duration-300" id="modal-content">
-            <button onclick="closeContactForm()" class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors">
+    <!-- Modale de Commande & Brief 100% Automatisé -->
+    <div id="order-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 p-4">
+        <div class="glass-panel p-6 md:p-10 rounded-2xl w-full max-w-2xl relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="order-modal-content">
+            <button onclick="closeOrderModal()" class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
-            <h2 class="font-display text-2xl font-bold mb-2">Démarrer le projet</h2>
-            <p class="text-sm text-gray-400 mb-8">Parlez-nous de votre entreprise avant de poursuivre sur WhatsApp.</p>
             
-            <form id="lead-form" class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
+            <!-- Étape Formulaire -->
+            <div id="order-step-form">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="px-2.5 py-0.5 rounded-full bg-white/10 text-[10px] uppercase font-bold tracking-widest text-gray-300">Configuration Immédiate</span>
+                </div>
+                <h2 class="font-display text-2xl md:text-3xl font-bold mb-2">Lancer votre projet</h2>
+                <p class="text-xs text-gray-400 mb-6">Configurez votre besoin, obtenez votre devis ferme et générez votre identifiant de suivi en quelques secondes.</p>
+
+                <form id="automated-order-form" class="space-y-6">
+                    <!-- Choix de l'offre -->
                     <div>
-                        <label class="block text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-2 pl-1">Prénom & Nom</label>
-                        <input type="text" id="lf-nom" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white transition-colors">
+                        <label class="block text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-3">1. Formule de base</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label class="glass-card p-4 rounded-xl cursor-pointer border flex flex-col justify-between hover:border-white/30 transition-colors has-[:checked]:border-white has-[:checked]:bg-white/10">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="font-bold text-sm">L'Essentiel</span>
+                                    <input type="radio" name="plan" value="essential" data-price="300" data-title="L'Essentiel" checked onchange="calculateTotal()" class="accent-white">
+                                </div>
+                                <p class="text-xs text-gray-400 mb-2">Site vitrine épuré (3-5 pages), SEO de base, mobile-first.</p>
+                                <span class="font-display font-bold text-lg text-white">300 €</span>
+                            </label>
+
+                            <label class="glass-card p-4 rounded-xl cursor-pointer border flex flex-col justify-between hover:border-white/30 transition-colors has-[:checked]:border-white has-[:checked]:bg-white/10">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="font-bold text-sm">Pro Business</span>
+                                    <input type="radio" name="plan" value="pro" data-price="700" data-title="Pro Business" onchange="calculateTotal()" class="accent-white">
+                                </div>
+                                <p class="text-xs text-gray-400 mb-2">Jusqu'à 10 pages, animations avancées, CMS & intégrations.</p>
+                                <span class="font-display font-bold text-lg text-white">700 €</span>
+                            </label>
+                        </div>
                     </div>
+
+                    <!-- Modules additionnels -->
                     <div>
-                        <label class="block text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-2 pl-1">Adresse E-mail</label>
-                        <input type="email" id="lf-email" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white transition-colors">
+                        <label class="block text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-3">2. Options & Modules</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <label class="glass-card p-3 rounded-lg cursor-pointer border border-white/5 flex items-center justify-between text-xs hover:border-white/20">
+                                <span class="text-gray-300">Boutique / E-Commerce (+200€)</span>
+                                <input type="checkbox" value="ecommerce" data-price="200" data-name="Module E-commerce" onchange="calculateTotal()" class="opt-check accent-white">
+                            </label>
+                            <label class="glass-card p-3 rounded-lg cursor-pointer border border-white/5 flex items-center justify-between text-xs hover:border-white/20">
+                                <span class="text-gray-300">Audit SEO & Stratégie (+100€)</span>
+                                <input type="checkbox" value="seo" data-price="100" data-name="SEO Avancé" onchange="calculateTotal()" class="opt-check accent-white">
+                            </label>
+                            <label class="glass-card p-3 rounded-lg cursor-pointer border border-white/5 flex items-center justify-between text-xs hover:border-white/20">
+                                <span class="text-gray-300">Livraison Express 7 jours (+150€)</span>
+                                <input type="checkbox" value="express" data-price="150" data-name="Livraison Express" onchange="calculateTotal()" class="opt-check accent-white">
+                            </label>
+                            <label class="glass-card p-3 rounded-lg cursor-pointer border border-white/5 flex items-center justify-between text-xs hover:border-white/20">
+                                <span class="text-gray-300">Identité Visuelle & Logo (+120€)</span>
+                                <input type="checkbox" value="branding" data-price="120" data-name="Branding & Logo" onchange="calculateTotal()" class="opt-check accent-white">
+                            </label>
+                        </div>
                     </div>
+
+                    <!-- Coordonnées & Brief express -->
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-3">3. Vos coordonnées & Brief</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                            <input type="text" id="order-name" placeholder="Prénom & Nom" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-xs focus:outline-none focus:border-white/40 text-white">
+                            <input type="email" id="order-email" placeholder="Adresse Email" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-xs focus:outline-none focus:border-white/40 text-white">
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                            <input type="text" id="order-company" placeholder="Nom de l'entreprise" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-xs focus:outline-none focus:border-white/40 text-white">
+                            <input type="text" id="order-sector" placeholder="Secteur d'activité" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-xs focus:outline-none focus:border-white/40 text-white">
+                        </div>
+                        <textarea id="order-notes" rows="2" placeholder="Objectifs spécifiques ou liens d'inspiration..." class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-xs focus:outline-none focus:border-white/40 text-white"></textarea>
+                    </div>
+
+                    <!-- Barre de total et validation -->
+                    <div class="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <span class="text-[10px] uppercase tracking-widest text-gray-500 block">Total estimé</span>
+                            <span id="calculated-price" class="font-display text-2xl font-bold text-white">300 €</span>
+                        </div>
+                        <button type="submit" class="w-full sm:w-auto bg-white text-black font-bold px-8 py-3.5 rounded-full text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+                            Valider la commande <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Étape Succès / Confirmation -->
+            <div id="order-step-success" class="hidden text-center py-6">
+                <div class="w-16 h-16 bg-green-500/20 text-green-400 border border-green-500/30 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fa-solid fa-check"></i>
                 </div>
-                <div>
-                    <label class="block text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-2 pl-1">Nom de l'entreprise</label>
-                    <input type="text" id="lf-entreprise" required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white transition-colors">
+                <h3 class="font-display text-2xl font-bold mb-2">Commande Enregistrée !</h3>
+                <p class="text-xs text-gray-400 mb-6 max-w-md mx-auto">Votre dossier est créé automatiquement dans notre système. Conservez votre identifiant ci-dessous pour suivre votre projet en direct.</p>
+
+                <div class="glass-card p-6 rounded-xl max-w-sm mx-auto mb-8 border border-white/20">
+                    <span class="text-[10px] uppercase tracking-widest text-gray-400 block mb-1">Votre Identifiant Projet</span>
+                    <span id="created-order-id" class="font-mono text-2xl font-bold text-white tracking-widest">CMD-0000</span>
                 </div>
-                <div>
-                    <label class="block text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-2 pl-1">Secteur / Activité</label>
-                    <input type="text" id="lf-secteur" placeholder="Ex: E-commerce, Restauration..." required class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-white/30 text-white transition-colors">
+
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <a id="link-to-dashboard" href="#" class="bg-white text-black font-bold px-6 py-3 rounded-full text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+                        Accéder à mon Espace Suivi <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                    <button onclick="closeOrderModal()" class="px-6 py-3 rounded-full border border-white/20 text-xs font-medium hover:bg-white/10 transition-colors">
+                        Fermer
+                    </button>
                 </div>
-                <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded-lg mt-6 flex items-center justify-center gap-3 hover:bg-gray-200 transition-colors">
-                    Continuer sur WhatsApp <i class="fa-brands fa-whatsapp text-xl"></i>
-                </button>
-            </form>
+            </div>
         </div>
     </div>
 
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/5 px-6 py-4 md:px-10">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="font-display font-bold text-xl tracking-wider">ROUIS.</div>
+            <a href="#" class="font-display font-bold text-xl tracking-wider">ROUIS.</a>
             
             <div class="hidden md:flex gap-8 text-[11px] uppercase tracking-[0.2em] text-gray-400 font-medium items-center">
                 <a href="#vision" class="hover:text-white transition-colors">Vision</a>
                 <a href="#processus" class="hover:text-white transition-colors">Méthode</a>
                 <a href="#expertises" class="hover:text-white transition-colors">Offres</a>
-                <a href="/suivis" class="text-white hover:text-gray-300 transition-colors flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
-                    <i class="fa-solid fa-circle text-[6px] animate-pulse"></i> Espace Client
+                <a href="suivis.html" class="text-white hover:text-gray-300 transition-colors flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
+                    <i class="fa-solid fa-circle text-[6px] animate-pulse text-green-400"></i> Espace Suivi
                 </a>
             </div>
 
-            <button onclick="openContactForm('Je souhaite démarrer un projet avec Rouis Studio.')" class="hidden md:flex bg-white text-black px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wide hover:scale-105 transition-transform items-center gap-2">
-                Démarrer
-            </button>
-            
-            <!-- Menu Mobile Bouton -->
-            <button class="md:hidden text-white text-xl">
-                <i class="fa-solid fa-bars"></i>
+            <button onclick="openOrderModal()" class="hidden md:flex bg-white text-black px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wide hover:scale-105 transition-transform items-center gap-2">
+                Commander
             </button>
         </div>
     </nav>
 
     <!-- Héro Section -->
-    <section class="min-h-screen flex flex-col justify-center px-4 relative pt-20 pb-10">
-        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
+    <section class="min-h-screen flex flex-col justify-center px-4 relative pt-24 pb-16">
+        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
         
         <div class="max-w-6xl mx-auto text-center reveal relative z-10 w-full">
             <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/10 bg-white/5 text-[10px] uppercase tracking-[0.2em] mb-8 text-gray-400 backdrop-blur-md">
-                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Basé à Paris, France
+                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Studio Digital & Créatif
             </div>
             
-            <h1 class="font-display text-5xl md:text-7xl lg:text-[100px] font-bold tracking-tighter leading-[1.05] mb-8 text-glow">
+            <h1 class="font-display text-5xl md:text-7xl lg:text-[90px] font-bold tracking-tighter leading-[1.05] mb-8 text-glow">
                 Façonnez votre <br> <span class="text-gray-500">empreinte digitale.</span>
             </h1>
             
-            <p class="text-lg text-gray-400 max-w-xl mx-auto mb-12 font-light leading-relaxed">
-                Studio de création parisien spécialisé dans le développement d'expériences web immersives, ultra-rapides et pensées pour convertir.
+            <p class="text-base md:text-lg text-gray-400 max-w-xl mx-auto mb-10 font-light leading-relaxed">
+                Conception d'expériences web immersives, ultra-rapides et optimisées pour la conversion. Traitement et suivi automatisés en temps réel.
             </p>
             
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <button onclick="openContactForm('Je souhaite discuter de mon projet web.')" class="bg-white text-black px-10 py-4 rounded-full font-medium text-sm hover:scale-105 transition-transform flex items-center justify-center gap-3">
-                    Confier mon projet <i class="fa-solid fa-arrow-right"></i>
+                <button onclick="openOrderModal()" class="bg-white text-black px-10 py-4 rounded-full font-medium text-sm hover:scale-105 transition-transform flex items-center justify-center gap-3">
+                    Configurer mon projet <i class="fa-solid fa-arrow-right"></i>
                 </button>
-                <a href="#expertises" class="px-10 py-4 rounded-full font-medium text-sm border border-white/20 hover:bg-white/10 transition-colors flex items-center justify-center">
-                    Voir les offres
+                <a href="suivis.html" class="px-10 py-4 rounded-full font-medium text-sm border border-white/20 hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-folder-open text-xs"></i> Suivre ma commande
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Bandeau Défilant (Marquee) -->
+    <!-- Bandeau Défilant -->
     <div class="w-full overflow-hidden border-y border-white/5 py-4 bg-brand-gray relative flex items-center no-scrollbar">
         <div class="flex whitespace-nowrap animate-marquee">
             <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">UI/UX Design</span>
@@ -146,168 +216,111 @@
             <span class="text-white mx-8">•</span>
             <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">E-commerce</span>
             <span class="text-white mx-8">•</span>
-            <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">Identité Visuelle</span>
-            <span class="text-white mx-8">•</span>
-            <!-- Répétition pour l'effet infini -->
             <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">UI/UX Design</span>
             <span class="text-white mx-8">•</span>
             <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">Développement Web</span>
-            <span class="text-white mx-8">•</span>
-            <span class="text-xs uppercase tracking-[0.3em] font-medium text-gray-500 mx-8">Performances SEO</span>
-            <span class="text-white mx-8">•</span>
         </div>
     </div>
 
-    <!-- Section Pourquoi Nous Choisir -->
-    <section id="vision" class="py-32 px-6">
+    <!-- Section Vision -->
+    <section id="vision" class="py-28 px-6">
         <div class="max-w-7xl mx-auto w-full reveal">
-            <div class="text-center mb-20">
+            <div class="text-center mb-16">
                 <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tighter mb-4">L'Excellence comme standard.</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto text-sm">Nous ne créons pas de simples sites web. Nous concevons des outils de croissance sur-mesure pour propulser votre entreprise.</p>
+                <p class="text-gray-400 max-w-2xl mx-auto text-sm">Nous concevons des outils de croissance sur-mesure pour propulser votre entreprise avec une clarté absolue.</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-6">
-                <!-- Card 1 -->
-                <div class="glass-card p-10 rounded-2xl hover-lift">
-                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-8 border border-white/10">
-                        <i class="fa-solid fa-bolt text-white text-xl"></i>
+                <div class="glass-card p-8 rounded-2xl hover-lift">
+                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-6 border border-white/10">
+                        <i class="fa-solid fa-bolt text-white text-lg"></i>
                     </div>
-                    <h3 class="font-display text-xl font-bold mb-4">Performances Absolues</h3>
-                    <p class="text-sm text-gray-400 leading-relaxed">Un code optimisé au millimètre. Des temps de chargement instantanés pour maximiser votre SEO sur Google et retenir l'attention de vos visiteurs.</p>
+                    <h3 class="font-display text-lg font-bold mb-3">Performances Absolues</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Code optimisé pour des chargements instantanés et un référencement naturel efficace.</p>
                 </div>
-                <!-- Card 2 -->
-                <div class="glass-card p-10 rounded-2xl hover-lift">
-                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-8 border border-white/10">
-                        <i class="fa-solid fa-pen-nib text-white text-xl"></i>
+                <div class="glass-card p-8 rounded-2xl hover-lift">
+                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-6 border border-white/10">
+                        <i class="fa-solid fa-pen-nib text-white text-lg"></i>
                     </div>
-                    <h3 class="font-display text-xl font-bold mb-4">Design Immersif</h3>
-                    <p class="text-sm text-gray-400 leading-relaxed">Une direction artistique unique. Nous concevons des interfaces esthétiques et modernes qui reflètent parfaitement l'ADN de votre marque.</p>
+                    <h3 class="font-display text-lg font-bold mb-3">Design Immersif</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Interfaces modernes et percutantes qui renforcent la valeur perçue de votre marque.</p>
                 </div>
-                <!-- Card 3 -->
-                <div class="glass-card p-10 rounded-2xl hover-lift">
-                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-8 border border-white/10">
-                        <i class="fa-solid fa-mobile-screen text-white text-xl"></i>
+                <div class="glass-card p-8 rounded-2xl hover-lift">
+                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-6 border border-white/10">
+                        <i class="fa-solid fa-mobile-screen text-white text-lg"></i>
                     </div>
-                    <h3 class="font-display text-xl font-bold mb-4">Mobile-First</h3>
-                    <p class="text-sm text-gray-400 leading-relaxed">Plus de 70% du trafic mondial est sur smartphone. Nos sites sont développés en priorité pour offrir une ergonomie parfaite sur mobile.</p>
+                    <h3 class="font-display text-lg font-bold mb-3">Mobile-First</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Ergonomie étudiée sur smartphone pour capter l'ensemble de votre audience.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Section Processus -->
-    <section id="processus" class="py-32 px-6 border-t border-white/5 bg-[#080808]">
+    <!-- Tarifs & Offres -->
+    <section id="expertises" class="py-28 px-6 border-t border-white/5 relative">
         <div class="max-w-7xl mx-auto w-full reveal">
-            <div class="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
-                <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tighter">Une méthode<br>chirurgicale.</h2>
-                <p class="text-gray-400 max-w-sm text-sm">Un processus clair et transparent. Vous suivez l'avancement en temps réel depuis votre espace client dédié.</p>
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tighter mb-4">Formules & Tarifs.</h2>
+                <p class="text-gray-400 max-w-sm mx-auto text-sm">Transparence totale et démarrage immédiat.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <!-- Etape 1 -->
-                <div class="relative">
-                    <div class="font-display text-6xl font-bold text-white/5 mb-4 absolute -top-8 -left-4 pointer-events-none">01</div>
-                    <h3 class="font-bold text-lg mb-2 relative z-10">Stratégie & Brief</h3>
-                    <p class="text-sm text-gray-400 relative z-10">Analyse de vos besoins, de votre cible et définition de l'arborescence du site.</p>
-                </div>
-                <!-- Etape 2 -->
-                <div class="relative">
-                    <div class="font-display text-6xl font-bold text-white/5 mb-4 absolute -top-8 -left-4 pointer-events-none">02</div>
-                    <h3 class="font-bold text-lg mb-2 relative z-10">Design UI/UX</h3>
-                    <p class="text-sm text-gray-400 relative z-10">Création des maquettes graphiques haute fidélité pour validation visuelle.</p>
-                </div>
-                <!-- Etape 3 -->
-                <div class="relative">
-                    <div class="font-display text-6xl font-bold text-white/5 mb-4 absolute -top-8 -left-4 pointer-events-none">03</div>
-                    <h3 class="font-bold text-lg mb-2 relative z-10">Développement</h3>
-                    <p class="text-sm text-gray-400 relative z-10">Intégration du code propre, animations et optimisation des performances.</p>
-                </div>
-                <!-- Etape 4 -->
-                <div class="relative">
-                    <div class="font-display text-6xl font-bold text-white/5 mb-4 absolute -top-8 -left-4 pointer-events-none">04</div>
-                    <h3 class="font-bold text-lg mb-2 relative z-10">Lancement</h3>
-                    <p class="text-sm text-gray-400 relative z-10">Tests finaux, mise en ligne sur votre domaine et remise des accès complets.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Expertises / Tarifs -->
-    <section id="expertises" class="py-32 px-6 border-t border-white/5 relative">
-        <div class="max-w-7xl mx-auto w-full reveal">
-            <div class="text-center mb-20">
-                <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tighter mb-4">Signatures Techniques.</h2>
-                <p class="text-gray-400 max-w-sm mx-auto text-sm">Une tarification transparente pour des solutions haut de gamme.</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <!-- Pack 300 -->
-                <div class="glass-panel p-10 hover-lift group cursor-pointer rounded-3xl flex flex-col" onclick="openContactForm('Je souhaite réserver le module L\'Essentiel (300€)')">
-                    <div class="flex justify-between items-start mb-12">
-                        <h3 class="font-display text-2xl font-bold">L'Essentiel</h3>
-                        <span class="text-2xl font-light text-gray-400">300€</span>
+                <div class="glass-panel p-8 hover-lift rounded-3xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-8">
+                            <h3 class="font-display text-2xl font-bold">L'Essentiel</h3>
+                            <span class="text-2xl font-light text-gray-400">300 €</span>
+                        </div>
+                        <ul class="space-y-3 mb-8 text-xs text-gray-400">
+                            <li class="flex gap-3"><span class="text-white">—</span> Site vitrine épuré (3 à 5 sections)</li>
+                            <li class="flex gap-3"><span class="text-white">—</span> Architecture Responsive & Rapide</li>
+                            <li class="flex gap-3"><span class="text-white">—</span> Formulaire et brief autonome</li>
+                            <li class="flex gap-3"><span class="text-white">—</span> Suivi de projet en direct</li>
+                        </ul>
                     </div>
-                    <ul class="space-y-4 mb-12 text-sm text-gray-400 flex-1">
-                        <li class="flex gap-4"><span class="text-white">—</span> Interface vitrine sur-mesure (3-5 pages)</li>
-                        <li class="flex gap-4"><span class="text-white">—</span> Architecture Responsive & Mobile-First</li>
-                        <li class="flex gap-4"><span class="text-white">—</span> Formulaire de contact sécurisé</li>
-                        <li class="flex gap-4"><span class="text-white">—</span> Optimisation SEO technique de base</li>
-                    </ul>
-                    <div class="text-xs uppercase tracking-[0.2em] font-bold group-hover:text-gray-300 transition-colors border-t border-white/10 pt-6">Réserver ce module <i class="fa-solid fa-arrow-right ml-2"></i></div>
+                    <button onclick="openOrderModal('essential')" class="w-full bg-white/10 hover:bg-white text-white hover:text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition-colors">
+                        Choisir l'Essentiel
+                    </button>
                 </div>
 
                 <!-- Pack 700 -->
-                <div class="glass-panel p-10 hover-lift group cursor-pointer rounded-3xl bg-white/5 flex flex-col relative overflow-hidden" onclick="openContactForm('Je souhaite réserver le module Pro Business (700€)')">
-                    <!-- Badge -->
-                    <div class="absolute top-8 right-8 bg-white text-black text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full">Recommandé</div>
-                    
-                    <div class="flex justify-between items-start mb-12">
-                        <h3 class="font-display text-2xl font-bold">Pro Business</h3>
-                        <span class="text-2xl font-bold text-white mt-8">700€</span>
+                <div class="glass-panel p-8 hover-lift rounded-3xl bg-white/5 border-white/20 flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-6 right-6 bg-white text-black text-[9px] uppercase tracking-widest font-bold px-3 py-1 rounded-full">Recommandé</div>
+                    <div>
+                        <div class="flex justify-between items-start mb-8">
+                            <h3 class="font-display text-2xl font-bold">Pro Business</h3>
+                            <span class="text-2xl font-bold text-white">700 €</span>
+                        </div>
+                        <ul class="space-y-3 mb-8 text-xs text-gray-300">
+                            <li class="flex gap-3"><span class="text-white">—</span> Tout ce qui est inclus dans L'Essentiel</li>
+                            <li class="flex gap-3"><span class="text-white">—</span> Jusqu'à 10 pages / sections dynamiques</li>
+                            <li class="flex gap-3"><span class="text-white">—</span> Animations fluides et design d'interaction</li>
+                            <li class="flex gap-3"><span class="text-white">—</span> Intégrations API & outils tiers</li>
+                        </ul>
                     </div>
-                    <ul class="space-y-4 mb-12 text-sm text-gray-300 flex-1">
-                        <li class="flex gap-4"><span class="text-white">—</span> Tout ce qui est inclus dans L'Essentiel</li>
-                        <li class="flex gap-4"><span class="text-white">—</span> Architecture dynamique (jusqu'à 10 pages)</li>
-                        <li class="flex gap-4"><span class="text-white">—</span> Espace d'administration / CMS (Blog, Portfolio)</li>
-                        <li class="flex gap-4"><span class="text-white">—</span> Animations fluides & Design d'interaction</li>
-                        <li class="flex gap-4"><span class="text-white">—</span> Intégration outils tiers (Stripe, Maps...)</li>
-                    </ul>
-                    <div class="text-xs uppercase tracking-[0.2em] font-bold text-white group-hover:text-gray-300 transition-colors border-t border-white/10 pt-6">Réserver ce module <i class="fa-solid fa-arrow-right ml-2"></i></div>
+                    <button onclick="openOrderModal('pro')" class="w-full bg-white text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors">
+                        Choisir Pro Business
+                    </button>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-white/5 bg-[#030303] pt-20 pb-10 px-6">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-20">
-            <div>
-                <h2 class="font-display text-3xl font-bold tracking-wider mb-2">ROUIS.</h2>
-                <p class="text-gray-500 text-sm max-w-xs">Le studio digital partenaire de votre croissance en ligne.</p>
+    <footer class="border-t border-white/5 bg-[#030303] py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-gray-500">
+            <div class="font-display font-bold text-xl text-white tracking-wider">ROUIS.</div>
+            <div class="flex gap-6">
+                <a href="suivis.html" class="hover:text-white transition-colors">Espace Suivi</a>
+                <a href="admin.html" class="hover:text-white transition-colors">Portail Gestion</a>
             </div>
-            
-            <div class="flex flex-col md:flex-row gap-10 md:gap-20">
-                <div>
-                    <h4 class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-4">Localisation</h4>
-                    <p class="text-sm text-gray-300">Paris, France<br>Disponible à l'international</p>
-                </div>
-                <div>
-                    <h4 class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-4">Contact</h4>
-                    <p class="text-sm text-gray-300"><a href="https://wa.me/21695213460" class="hover:text-white transition-colors">+216 95 213 460</a><br><a href="mailto:contact@rouis.studio" class="hover:text-white transition-colors">contact@rouis.studio</a></p>
-                </div>
-            </div>
-        </div>
-
-        <div class="max-w-7xl mx-auto border-t border-white/5 pt-8 flex justify-between items-center text-[10px] font-medium text-gray-600 uppercase tracking-widest">
-            <span>© 2026 Rouis Studio</span>
-            <div class="flex gap-4">
-                <a href="#" class="hover:text-white transition-colors">Mentions Légales</a>
-            </div>
+            <span>© 2026 Rouis Studio — Tous droits réservés</span>
         </div>
     </footer>
 
     <script>
-        // Animations d'apparition au scroll
+        // Observer pour les animations d'apparition
         document.addEventListener("DOMContentLoaded", () => {
             const reveals = document.querySelectorAll(".reveal");
             const observer = new IntersectionObserver((entries) => {
@@ -316,13 +329,18 @@
             reveals.forEach(reveal => observer.observe(reveal));
         });
 
-        // Logique du Formulaire & WhatsApp
-        let currentPackMessage = "";
-        const modal = document.getElementById('contact-modal');
-        const modalContent = document.getElementById('modal-content');
+        // Modale et calcul dynamique
+        const modal = document.getElementById('order-modal');
+        const modalContent = document.getElementById('order-modal-content');
 
-        function openContactForm(message) {
-            currentPackMessage = message;
+        function openOrderModal(preferredPlan = null) {
+            if (preferredPlan) {
+                const radio = document.querySelector(`input[name="plan"][value="${preferredPlan}"]`);
+                if (radio) radio.checked = true;
+            }
+            calculateTotal();
+            document.getElementById('order-step-form').classList.remove('hidden');
+            document.getElementById('order-step-success').classList.add('hidden');
             modal.classList.remove('hidden');
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
@@ -330,32 +348,64 @@
             }, 10);
         }
 
-        function closeContactForm() {
+        function closeOrderModal() {
             modal.classList.add('opacity-0');
             modalContent.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
         }
 
-        // Fermer la modale si on clique en dehors
-        modal.addEventListener('click', (e) => {
-            if(e.target === modal) closeContactForm();
-        });
+        function calculateTotal() {
+            const planEl = document.querySelector('input[name="plan"]:checked');
+            let total = planEl ? parseInt(planEl.dataset.price) : 300;
+            document.querySelectorAll('.opt-check:checked').forEach(cb => {
+                total += parseInt(cb.dataset.price);
+            });
+            document.getElementById('calculated-price').innerText = `${total} €`;
+            return total;
+        }
 
-        document.getElementById('lead-form').addEventListener('submit', (e) => {
+        // Soumission et enregistrement local
+        document.getElementById('automated-order-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const nom = document.getElementById('lf-nom').value;
-            const email = document.getElementById('lf-email').value;
-            const entreprise = document.getElementById('lf-entreprise').value;
-            const secteur = document.getElementById('lf-secteur').value;
+            const planEl = document.querySelector('input[name="plan"]:checked');
+            const total = calculateTotal();
+            
+            const selectedOptions = [];
+            document.querySelectorAll('.opt-check:checked').forEach(cb => {
+                selectedOptions.push(cb.dataset.name);
+            });
 
-            // Construction propre du message WhatsApp
-            const finalMessage = `${currentPackMessage}\n\n*📌 Informations Client :*\n- *Nom :* ${nom}\n- *Email :* ${email}\n- *Entreprise :* ${entreprise}\n- *Secteur :* ${secteur}`;
+            // Génération ID unique
+            const orderId = 'CMD-' + Math.floor(1000 + Math.random() * 9000);
 
-            const numero = "21695213460"; // Ton numéro de téléphone WhatsApp
-            window.open(`https://wa.me/${numero}?text=${encodeURIComponent(finalMessage)}`, "_blank");
-            closeContactForm();
+            const newOrder = {
+                id: orderId,
+                date: new Date().toISOString(),
+                client: {
+                    name: document.getElementById('order-name').value,
+                    email: document.getElementById('order-email').value,
+                    company: document.getElementById('order-company').value,
+                    sector: document.getElementById('order-sector').value,
+                },
+                plan: planEl ? planEl.dataset.title : "L'Essentiel",
+                options: selectedOptions,
+                notes: document.getElementById('order-notes').value,
+                totalPrice: total,
+                step: 1, // 1: Stratégie, 2: Design UI/UX, 3: Développement, 4: Livré
+                stagingUrl: "",
+                feedbacks: []
+            };
+
+            // Sauvegarde dans localStorage
+            const existingOrders = JSON.parse(localStorage.getItem('rouis_orders') || '[]');
+            existingOrders.unshift(newOrder);
+            localStorage.setItem('rouis_orders', JSON.stringify(existingOrders));
+
+            // Affichage succès
+            document.getElementById('created-order-id').innerText = orderId;
+            document.getElementById('link-to-dashboard').href = `suivis.html?id=${orderId}`;
+            document.getElementById('order-step-form').classList.add('hidden');
+            document.getElementById('order-step-success').classList.remove('hidden');
             e.target.reset();
         });
     </script>
